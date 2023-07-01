@@ -47,8 +47,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
+  inputContainer: {
+    rowGap: 20,
+  },
   input: {
-    marginBottom: 16,
     height: 50,
     paddingHorizontal: 16,
     backgroundColor: "#F6F6F6",
@@ -56,13 +58,14 @@ const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
     borderRadius: 8,
   },
-  lastInput: {
-    marginBottom: 0,
-  },
   inputFocused: {
     borderColor: "#FF6C00",
   },
-
+  errorMessage: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+  },
   togglePasswordBtn: {
     position: "absolute",
     right: 16,

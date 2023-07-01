@@ -4,13 +4,12 @@ import styles from "./styleSheet";
 
 function CredentialInputs({
   control,
-  errors,
   isPasswordHide,
   togglePasswordShow,
 }) {
 
   return (
-    <>
+    <View style={styles.inputContainer}>
       <Controller
         control={control}
         name='email'
@@ -18,41 +17,41 @@ function CredentialInputs({
           required: true,
         }}
         render={({
-          field: { onChange, onBlur, value },
-          fieldState: { isTouched  },
+          field: { onChange, value },
+          fieldState: { isDirty, error },
         }) => (
-          <>
+          <View>
             <TextInput
-              style={[styles.input, isTouched && styles.inputFocused]}
+              style={[styles.input, isDirty && styles.inputFocused]}
               placeholder='Адреса електронної пошти'
               onChangeText={onChange}
-              onBlur={onBlur}
               value={value}
             />
-            {errors.email && <Text>Email is required.</Text>}
-          </>
+            {error && (
+              <Text style={styles.errorMessage}>Email is required.</Text>
+            )}
+          </View>
         )}
       />
 
       <Controller
         control={control}
+        name='password'
         rules={{
           required: true,
           maxLength: 50,
         }}
         render={({
-          field: { onChange, onBlur, value },
-          fieldState: { isTouched },
+          field: { onChange, value },
+          fieldState: { isDirty, error },
         }) => (
           <View>
             <TextInput
               style={[
                 styles.input,
-                styles.lastInput,
-                isTouched && styles.inputFocused,
+                isDirty && styles.inputFocused,
               ]}
               placeholder='Пароль'
-              onBlur={onBlur}
               onChangeText={onChange}
               value={value}
               secureTextEntry={isPasswordHide}
@@ -65,12 +64,13 @@ function CredentialInputs({
                 {isPasswordHide ? "Показати" : "Сховати"}
               </Text>
             </TouchableOpacity>
-            {errors.password && <Text>Password is required.</Text>}
+            {error && (
+              <Text style={styles.errorMessage}>Password is required.</Text>
+            )}
           </View>
         )}
-        name='password'
       />
-    </>
+    </View>
   );
 };
 

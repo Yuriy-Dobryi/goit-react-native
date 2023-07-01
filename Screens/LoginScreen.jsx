@@ -8,7 +8,6 @@ function LoginScreen() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
   } = useForm({
     shouldUnregister: true,
     defaultValues: {
@@ -32,7 +31,6 @@ function LoginScreen() {
       {/* email and password inputs */}
       <CredentialInputs
         control={control}
-        errors={errors}
         isPasswordHide={isPasswordHide}
         togglePasswordShow={togglePasswordShow}
       />
