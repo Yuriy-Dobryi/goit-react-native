@@ -1,33 +1,46 @@
 import { useState } from "react";
-import {
-  SafeAreaView,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { useForm } from "react-hook-form";
 import CredentialInputs from "./CredentialInputs";
 import styles from "./styleSheet";
 
-const LoginScreen = () => {
-  const [focusedField, setFocusedField] = useState(false);
+function LoginScreen() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    shouldUnregister: true,
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
   const [isPasswordHide, setShowPassword] = useState(true);
 
+  function onSubmit(data) {
+    console.log(data);
+  }
   function togglePasswordShow() {
     setShowPassword(!isPasswordHide);
   }
 
   return (
-    <SafeAreaView style={[styles.form, { paddingTop: 32 }]}>
+    <View style={[styles.form, { paddingTop: 32 }]}>
       <Text style={styles.title}>Увійти</Text>
 
       {/* email and password inputs */}
       <CredentialInputs
-        focusedField={focusedField}
-        setFocusedField={setFocusedField}
+        control={control}
+        errors={errors}
         isPasswordHide={isPasswordHide}
         togglePasswordShow={togglePasswordShow}
       />
 
-      <TouchableOpacity style={styles.primaryBtn}>
+      <TouchableOpacity
+        style={styles.primaryBtn}
+        onPress={handleSubmit(onSubmit)}
+      >
         <Text style={styles.primaryBtnText}>Увійти</Text>
       </TouchableOpacity>
 
@@ -36,7 +49,7 @@ const LoginScreen = () => {
           Немає акаунту? Зареєструватися
         </Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 };
 
