@@ -66,6 +66,7 @@ const Registration = () => {
       <KeyboardAvoidingView
         style={styles.inputList}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset="50"
       >
         <Controller
           control={control}

@@ -35,6 +35,7 @@ function LoginScreen() {
       <KeyboardAvoidingView
         style={styles.inputList}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}
       >
         <CredentialInputs
           control={control}
