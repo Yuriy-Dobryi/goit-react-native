@@ -23,6 +23,7 @@ const Registration = () => {
       password: "",
     },
   });
+  const [focusedField, setFocusedField] = useState(false);
   const [isPasswordHide, setShowPassword] = useState(true);
 
   async function selectImg() {
@@ -50,18 +51,18 @@ const Registration = () => {
 
   return (
     <View style={styles.form}>
-      
       <View style={styles.userPhoto}>
         {userImg && <Image style={styles.addBtn} source={userImg} />}
         <TouchableOpacity
           style={styles.addBtn}
-          onPress={userImg ? removeImg : selectImg}>
+          onPress={userImg ? removeImg : selectImg}
+        >
           <Image source={addBtnImg} />
         </TouchableOpacity>
       </View>
 
       <Text style={styles.title}>Реєстрація</Text>
-      
+
       <KeyboardAvoidingView
         style={styles.inputList}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -72,15 +73,17 @@ const Registration = () => {
           rules={{
             required: true,
           }}
-          render={({
-            field: { onChange, value },
-            fieldState: { isDirty, error },
-          }) => (
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
             <View>
               <TextInput
-                style={[styles.input, isDirty && styles.inputFocused]}
+                style={[
+                  styles.input,
+                  focusedField === "login" && styles.inputFocused,
+                ]}
                 placeholder='Логін'
                 onChangeText={onChange}
+                onFocus={() => setFocusedField("login")}
+                onBlur={() => setFocusedField("")}
                 value={value}
               />
               {error && (
@@ -92,6 +95,8 @@ const Registration = () => {
         {/* email and password inputs */}
         <CredentialInputs
           control={control}
+          focusedField={focusedField}
+          setFocusedField={setFocusedField}
           isPasswordHide={isPasswordHide}
           togglePasswordShow={togglePasswordShow}
         />

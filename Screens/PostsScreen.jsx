@@ -10,8 +10,8 @@ const PostsScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <ImageBackground style={styles.postScreenBG} source={imagePath}>
-          <Registration />
-          {/* <LoginScreen /> */}
+          {/* <Registration /> */}
+          <LoginScreen />
         </ImageBackground>
         <StatusBar style='auto' />
       </View>

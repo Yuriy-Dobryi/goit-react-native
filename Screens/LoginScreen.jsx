@@ -17,6 +17,7 @@ function LoginScreen() {
       password: "",
     },
   });
+  const [focusedField, setFocusedField] = useState(false);
   const [isPasswordHide, setShowPassword] = useState(true);
 
   function onSubmit(data) {
@@ -32,11 +33,13 @@ function LoginScreen() {
 
       {/* email and password inputs */}
       <KeyboardAvoidingView
-        styles={styles.inputList}
+        style={styles.inputList}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <CredentialInputs
           control={control}
+          focusedField={focusedField}
+          setFocusedField={setFocusedField}
           isPasswordHide={isPasswordHide}
           togglePasswordShow={togglePasswordShow}
         />

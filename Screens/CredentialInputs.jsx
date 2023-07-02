@@ -9,6 +9,8 @@ import styles from "./styleSheet";
 
 function CredentialInputs({
   control,
+  focusedField,
+  setFocusedField,
   isPasswordHide,
   togglePasswordShow,
 }) {
@@ -20,15 +22,17 @@ function CredentialInputs({
         rules={{
           required: true,
         }}
-        render={({
-          field: { onChange, value },
-          fieldState: { isDirty, error },
-        }) => (
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
           <View>
             <TextInput
-              style={[styles.input, isDirty && styles.inputFocused]}
+              style={[
+                styles.input,
+                focusedField === "email" && styles.inputFocused,
+              ]}
               placeholder='Адреса електронної пошти'
               onChangeText={onChange}
+              onFocus={() => setFocusedField("email")}
+              onBlur={() => setFocusedField("")}
               value={value}
             />
             {error && (
@@ -45,15 +49,17 @@ function CredentialInputs({
           required: true,
           maxLength: 50,
         }}
-        render={({
-          field: { onChange, value },
-          fieldState: { isDirty, error },
-        }) => (
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
           <View>
             <TextInput
-              style={[styles.input, isDirty && styles.inputFocused]}
+              style={[
+                styles.input,
+                focusedField === "password" && styles.inputFocused,
+              ]}
               placeholder='Пароль'
               onChangeText={onChange}
+              onFocus={() => setFocusedField("password")}
+              onBlur={() => setFocusedField("")}
               value={value}
               secureTextEntry={isPasswordHide}
             />
