@@ -2,9 +2,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Text,
-  KeyboardAvoidingView,
-  Platform,
+  Text
 } from "react-native";
 import { Controller } from "react-hook-form";
 import styles from "./styleSheet";
@@ -14,13 +12,8 @@ function CredentialInputs({
   isPasswordHide,
   togglePasswordShow,
 }) {
-const keyboardVerticalOffset = Platform.OS === "ios" ? 50 : 0;
   return (
-    <KeyboardAvoidingView
-      style={styles.inputContainer}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={keyboardVerticalOffset}
-    >
+    <>
       <Controller
         control={control}
         name='email'
@@ -78,7 +71,7 @@ const keyboardVerticalOffset = Platform.OS === "ios" ? 50 : 0;
           </View>
         )}
       />
-    </KeyboardAvoidingView>
+    </>
   );
 };
 

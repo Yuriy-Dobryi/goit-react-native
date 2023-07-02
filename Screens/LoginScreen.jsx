@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { useForm } from "react-hook-form";
 import CredentialInputs from "./CredentialInputs";
 import styles from "./styleSheet";
 
 function LoginScreen() {
-  const {
-    control,
-    handleSubmit,
-  } = useForm({
-    shouldUnregister: true,
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       email: "",
       password: "",
@@ -29,11 +31,16 @@ function LoginScreen() {
       <Text style={styles.title}>Увійти</Text>
 
       {/* email and password inputs */}
-      <CredentialInputs
-        control={control}
-        isPasswordHide={isPasswordHide}
-        togglePasswordShow={togglePasswordShow}
-      />
+      <KeyboardAvoidingView
+        styles={styles.inputList}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <CredentialInputs
+          control={control}
+          isPasswordHide={isPasswordHide}
+          togglePasswordShow={togglePasswordShow}
+        />
+      </KeyboardAvoidingView>
 
       <TouchableOpacity
         style={styles.primaryBtn}
@@ -49,6 +56,6 @@ function LoginScreen() {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 export default LoginScreen;

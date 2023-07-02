@@ -40,14 +40,14 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    marginBottom: 33,
+    marginBottom: 32,
     color: "#212121",
     fontSize: 30,
     fontWeight: 500,
     textAlign: "center",
   },
 
-  inputContainer: {
+  inputList: {
     rowGap: 16,
   },
   input: {
