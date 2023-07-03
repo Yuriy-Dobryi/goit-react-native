@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { useForm } from "react-hook-form";
 import CredentialInputs from "./CredentialInputs";
@@ -34,8 +33,8 @@ function LoginScreen() {
       {/* email and password inputs */}
       <KeyboardAvoidingView
         style={styles.inputList}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}
+        behavior="padding"
+        keyboardVerticalOffset="150"
       >
         <CredentialInputs
           control={control}

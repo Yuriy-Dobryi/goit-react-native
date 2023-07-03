@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Text,
   KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useForm, Controller } from "react-hook-form";
@@ -65,7 +64,7 @@ const Registration = () => {
 
       <KeyboardAvoidingView
         style={styles.inputList}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={"padding"}
         keyboardVerticalOffset="50"
       >
         <Controller
