@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useForm } from "react-hook-form";
 import CredentialInputs from "./CredentialInputs";

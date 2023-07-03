@@ -1,17 +1,22 @@
 import { useState } from "react";
+import { StyleSheet } from "react-native";
 import {
   View,
   Image,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Button,
+  Keyboard,
   Text,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useForm, Controller } from "react-hook-form";
 
 import CredentialInputs from "./CredentialInputs";
-import styles from "./styleSheet";
+// import styles from "./styleSheet";
 import addBtnImg from "../images/add.png";
 
 const Registration = () => {
@@ -49,70 +54,53 @@ const Registration = () => {
   }
 
   return (
-    <View style={styles.form}>
-      <View style={styles.userPhoto}>
-        {userImg && <Image style={styles.addBtn} source={userImg} />}
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={userImg ? removeImg : selectImg}
-        >
-          <Image source={addBtnImg} />
-        </TouchableOpacity>
-      </View>
-
-      <Text style={styles.title}>Реєстрація</Text>
-
-      <KeyboardAvoidingView
-        style={styles.inputList}
-        behavior={"padding"}
-        keyboardVerticalOffset="50"
-      >
-        <Controller
-          control={control}
-          name='login'
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <View>
-              <TextInput
-                style={[
-                  styles.input,
-                  focusedField === "login" && styles.inputFocused,
-                ]}
-                placeholder='Логін'
-                onChangeText={onChange}
-                onFocus={() => setFocusedField("login")}
-                onBlur={() => setFocusedField("")}
-                value={value}
-              />
-              {error && (
-                <Text style={styles.errorMessage}>Login is required.</Text>
-              )}
-            </View>
-          )}
-        />
-        {/* email and password inputs */}
-        <CredentialInputs
-          control={control}
-          focusedField={focusedField}
-          setFocusedField={setFocusedField}
-          isPasswordHide={isPasswordHide}
-          togglePasswordShow={togglePasswordShow}
-        />
-      </KeyboardAvoidingView>
-
-      <TouchableOpacity
-        style={styles.primaryBtn}
-        onPress={handleSubmit(onSubmit)}
-      >
-        <Text style={styles.primaryBtnText}>Зареєструватися</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.secondaryBtn}>
-        <Text style={styles.secondaryBtnText}>Вже є акаунт ? Увійти</Text>
-      </TouchableOpacity>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <Text style={styles.header}>Header</Text>
+          <TextInput placeholder='Username' style={styles.textInput} />
+          <CredentialInputs
+            control={control}
+            focusedField={focusedField}
+            setFocusedField={setFocusedField}
+            isPasswordHide={isPasswordHide}
+            togglePasswordShow={togglePasswordShow}
+          />
+          <View style={styles.btnContainer}>
+            <Button title='Submit' onPress={() => null} />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  inner: {
+    padding: 24,
+    flex: 1,
+    justifyContent: "space-around",
+  },
+  header: {
+    fontSize: 36,
+    marginBottom: 48,
+  },
+  textInput: {
+    height: 40,
+    borderColor: "#000000",
+    borderBottomWidth: 1,
+    marginBottom: 36,
+  },
+  btnContainer: {
+    backgroundColor: "white",
+    marginTop: 12,
+  },
+});
 
 export default Registration;
