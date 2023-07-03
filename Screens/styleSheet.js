@@ -63,8 +63,9 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     position: "absolute",
-    left: 0,
+    left: 4,
     bottom: 0,
+    color: 'red',
   },
   togglePasswordBtn: {
     position: "absolute",
