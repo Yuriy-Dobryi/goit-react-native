@@ -1,14 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  postScreenBG: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-
   // REGISTRATION
   form: {
     position: "relative",
@@ -65,7 +57,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 4,
     bottom: 0,
-    color: 'red',
+    color: "red",
   },
   togglePasswordBtn: {
     position: "absolute",

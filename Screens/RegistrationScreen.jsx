@@ -10,8 +10,8 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { useForm, Controller } from "react-hook-form";
 
-import CredentialInputs from "./CredentialInputs";
-import styles from "./styleSheet";
+import CredentialInputs from "../components/CredentialInputs";
+import styles from "../components/styleSheet";
 import addBtnImg from "../images/add.png";
 
 const Registration = () => {

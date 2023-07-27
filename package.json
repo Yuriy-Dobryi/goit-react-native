@@ -9,6 +9,9 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.8",
+    "@react-navigation/native": "^6.1.7",
+    "@react-navigation/stack": "^6.3.17",
     "babel-plugin-inline-import": "^3.0.0",
     "check": "^1.0.0",
     "expo": "~48.0.18",
@@ -19,6 +22,9 @@
     "react": "18.2.0",
     "react-hook-form": "^7.45.1",
     "react-native": "0.71.8",
+    "react-native-gesture-handler": "~2.9.0",
+    "react-native-safe-area-context": "4.5.0",
+    "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
     "safety": "^0.2.1",
     "this": "^1.1.0",
