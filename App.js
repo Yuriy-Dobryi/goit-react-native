@@ -26,7 +26,7 @@ export default function App() {
         resizeMode={"cover"}
       >
         <NavigationContainer>
-          <MainStack.Navigator initialRouteName='Home'>
+          <MainStack.Navigator initialRouteName='Registration'>
             <MainStack.Screen
               name='Login'
               component={LoginScreen}

@@ -13,6 +13,7 @@ import { useForm, Controller } from "react-hook-form";
 import CredentialInputs from "../components/CredentialInputs";
 import styles from "../components/styleSheet";
 import addBtnImg from "../images/add.png";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Registration = () => {
   const [userImg, setUserImg] = useState(null);
@@ -49,68 +50,75 @@ const Registration = () => {
   }
 
   return (
-    <View style={styles.form}>
-      <View style={styles.userPhoto}>
-        {userImg && <Image style={styles.addBtn} source={userImg} />}
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={userImg ? removeImg : selectImg}
-        >
-          <Image source={addBtnImg} />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      <KeyboardAwareScrollView>
+        <View style={styles.form}>
+          <View style={styles.userPhoto}>
+            {userImg && <Image style={styles.addBtn} source={userImg} />}
+            <TouchableOpacity
+              style={styles.addBtn}
+              onPress={userImg ? removeImg : selectImg}
+            >
+              <Image source={addBtnImg} />
+            </TouchableOpacity>
+          </View>
 
-      <Text style={styles.title}>Реєстрація</Text>
+          <Text style={styles.title}>Реєстрація</Text>
 
-      <KeyboardAvoidingView
-        style={styles.inputList}
-        behavior="padding"
-        keyboardVerticalOffset="250"
-      >
-        <Controller
-          control={control}
-          name='login'
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <View>
-              <TextInput
-                style={[
-                  styles.input,
-                  focusedField === "login" && styles.inputFocused,
-                ]}
-                placeholder='Логін'
-                onChangeText={onChange}
-                onFocus={() => setFocusedField("login")}
-                onBlur={() => setFocusedField("")}
-                value={value}
-              />
-              {error && (
-                <Text style={styles.errorMessage}>Login is required.</Text>
+          <KeyboardAvoidingView
+            style={styles.inputList}
+            behavior='padding'
+            keyboardVerticalOffset={-165}
+          >
+            <Controller
+              control={control}
+              name='login'
+              rules={{
+                required: true,
+              }}
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <View>
+                  <TextInput
+                    style={[
+                      styles.input,
+                      focusedField === "login" && styles.inputFocused,
+                    ]}
+                    placeholder='Логін'
+                    onChangeText={onChange}
+                    onFocus={() => setFocusedField("login")}
+                    onBlur={() => setFocusedField("")}
+                    value={value}
+                  />
+                  {error && (
+                    <Text style={styles.errorMessage}>Login is required.</Text>
+                  )}
+                </View>
               )}
-            </View>
-          )}
-        />
-        {/* email and password inputs */}
-        <CredentialInputs
-          control={control}
-          focusedField={focusedField}
-          setFocusedField={setFocusedField}
-          isPasswordHide={isPasswordHide}
-          togglePasswordShow={togglePasswordShow}
-        />
-      </KeyboardAvoidingView>
+            />
+            {/* email and password inputs */}
+            <CredentialInputs
+              control={control}
+              focusedField={focusedField}
+              setFocusedField={setFocusedField}
+              isPasswordHide={isPasswordHide}
+              togglePasswordShow={togglePasswordShow}
+            />
+          </KeyboardAvoidingView>
 
-      <TouchableOpacity
-        style={styles.primaryBtn}
-        onPress={handleSubmit(onSubmit)}
-      >
-        <Text style={styles.primaryBtnText}>Зареєструватися</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.secondaryBtn}>
-        <Text style={styles.secondaryBtnText}>Вже є акаунт ? Увійти</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.primaryBtn}
+            onPress={handleSubmit(onSubmit)}
+          >
+            <Text style={styles.primaryBtnText}>Зареєструватися</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.secondaryBtn}>
+            <Text style={styles.secondaryBtnText}>Вже є акаунт ? Увійти</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAwareScrollView>
     </View>
   );
 };
