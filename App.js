@@ -31,7 +31,11 @@ export default function App() {
               component={RegistrationScreen}
               options={{ headerShown: false }}
             />
-            <MainStack.Screen name='Home' component={Home} options={{ header: false }}/>
+            <MainStack.Screen
+              name='Home'
+              component={Home}
+              options={{ headerShown: false }}
+            />
           </MainStack.Navigator>
         </NavigationContainer>
       </ImageBackground>

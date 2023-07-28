@@ -5,8 +5,7 @@ import userPhoto from "../images/user-photo.jpg";
 
 export default function PostsScreen() {
   return (
-    <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={styles.container}>
         <View style={styles.profile}>
           <Image source={userPhoto} style={styles.userImage} />
           <View>
@@ -14,19 +13,20 @@ export default function PostsScreen() {
             <Text style={styles.userEmail}>email@example.com</Text>
           </View>
         </View>
-        <View style={styles.mainPostContainer}>
+        <View style={{paddingBottom: 43}}>
           {posts.map((post) => {
             return <Post key={post.id} post={post} />;
           })}
         </View>
       </ScrollView>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 32,
     backgroundColor: "#fff",
   },
   profile: {
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   userImage: {
     width: 60,
     height: 60,
+    borderRadius: 16,
   },
   userLogin: {
     color: "#212121",
@@ -46,8 +47,5 @@ const styles = StyleSheet.create({
   userEmail: {
     color: "#212121",
     fontSize: 11,
-  },
-  mainPostContainer: {
-    marginBottom: 20,
   },
 });

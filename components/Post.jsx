@@ -1,19 +1,19 @@
 import { View, StyleSheet, Image, Text, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Comment from "../images/comment.png";
-import CommentTrue from "../images/comment-true.png";
-import Map from "../images/map-pin.png";
-import Like from "../images/thumbs.png";
+import { FontAwesome, AntDesign, Feather } from "@expo/vector-icons";
 
 export default function Post({ post }) {
   const navigation = useNavigation();
+  const isAnyComment = post.comments.length > 0;
+  const isAnyLike = post.likes > 0;
 
   return (
-    <View key={post.id} style={styles.postContainer}>
-      <Image source={post.image} style={styles.postImg} />
-      <Text style={styles.postText}>{post.name}</Text>
-      <View style={styles.description}>
-        <View style={{ display: "flex", flexDirection: "row", gap: 20 }}>
+    <View key={post.id} style={{ marginBottom: 32 }}>
+      <Image source={post.image} style={{ borderRadius: 8 }} />
+      <Text style={styles.title}>{post.name}</Text>
+
+      <View style={styles.statistics}>
+        <View style={{ flexDirection: "row", gap: 24 }}>
           <Pressable
             onPress={() =>
               navigation.navigate("CommentScreen", {
@@ -22,24 +22,24 @@ export default function Post({ post }) {
               })
             }
           >
-            {post.comments.length > 0 ? (
-              <View style={styles.commentContainer}>
-                <Image source={CommentTrue} style={styles.commentImg} />
-                <Text style={{ color: "#212121" }}>{post.comments.length}</Text>
-              </View>
-            ) : (
-              <View style={styles.commentContainer}>
-                <Image source={Comment} style={styles.commentImg} />
-                <Text style={{ color: "#BDBDBD" }}>{post.comments.length}</Text>
-              </View>
-            )}
-          </Pressable>
-          <Pressable onPress={() => console.log("liked")}>
-            <View style={styles.commentContainer}>
-              <Image source={Like} />
-              <Text style={{ color: "#212121" }}>{post.likes}</Text>
+            <View style={styles.statItem}>
+              <FontAwesome
+                name={isAnyComment ? "comment" : "comment-o"}
+                size={24}
+                color={isAnyComment ? "#FF6C00" : "#BDBDBD"}
+              />
+              <Text style={styles.statText}>{post.comments.length}</Text>
             </View>
           </Pressable>
+
+          {isAnyLike && (
+            <Pressable onPress={() => console.log("liked")}>
+              <View style={styles.statItem}>
+                <AntDesign name='like2' size={24} color='#FF6C00' />
+                <Text style={styles.statText}>{post.likes}</Text>
+              </View>
+            </Pressable>
+          )}
         </View>
 
         <Pressable
@@ -47,9 +47,13 @@ export default function Post({ post }) {
             navigation.navigate("MapScreen", { postLocation: post.location })
           }
         >
-          <View style={styles.placeContainer}>
-            <Image source={Map} />
-            <Text style={styles.placeText}>{post.place}</Text>
+          <View style={styles.statItem}>
+            <Feather name='map-pin' size={24} color='#BDBDBD' />
+            <Text
+              style={{ ...styles.statText, textDecorationLine: "underline" }}
+            >
+              {post.place}
+            </Text>
           </View>
         </Pressable>
       </View>
@@ -58,44 +62,23 @@ export default function Post({ post }) {
 }
 
 const styles = StyleSheet.create({
-  postContainer: {
-    marginBottom: 32,
-  },
-  postImg: {
-    height: 240,
-    marginBottom: 8,
-    borderRadius: 8,
-    width: "100%",
-  },
-  postText: {
+  title: {
+    marginVertical: 8,
     color: "#212121",
     fontSize: 16,
-    marginBottom: 8,
+    fontWeight: 500,
   },
-  description: {
-    display: "flex",
+  statistics: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  commentContainer: {
-    display: "flex",
+  statItem: {
     flexDirection: "row",
     alignItems: "center",
   },
-  commentImg: {
-    width: 24,
-    height: 24,
-    marginRight: 6,
-  },
-  placeContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  placeText: {
+  statText: {
     color: "#212121",
     fontSize: 16,
-    marginLeft: 4,
-    textDecorationLine: "underline",
+    marginLeft: 6,
   },
 });
