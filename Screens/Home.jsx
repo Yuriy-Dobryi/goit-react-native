@@ -33,6 +33,7 @@ export default function Home() {
 
   return (
     <Tabs.Navigator
+      initialRouteName='PostsScreen'
       screenOptions={{
         tabBarStyle: {
           height: 83,
@@ -67,6 +68,9 @@ export default function Home() {
         component={CreatePostScreen}
         options={{
           title: "Створити публікацію",
+          tabBarStyle: {
+            height: 0,
+          },
           headerLeft: () => goBackBtn,
           tabBarIcon: ({ color }) => tabBarIcon("plus", color),
         }}

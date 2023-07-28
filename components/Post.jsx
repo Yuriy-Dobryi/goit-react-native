@@ -16,7 +16,7 @@ export default function Post({ post }) {
         <View style={{ flexDirection: "row", gap: 24 }}>
           <Pressable
             onPress={() =>
-              navigation.navigate("CommentScreen", {
+              navigation.navigate("CommentsScreen", {
                 postComments: post.comments,
                 postImg: post.image,
               })
