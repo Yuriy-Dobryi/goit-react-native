@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  KeyboardAvoidingView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useForm, Controller } from "react-hook-form";
@@ -14,6 +13,8 @@ import CredentialInputs from "../components/CredentialInputs";
 import styles from "../components/styleSheet";
 import addBtnImg from "../images/add.png";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { ImageBackground } from "react-native";
+import bgImagePath from "../images/mountains-bg.png";
 
 const Registration = () => {
   const [userImg, setUserImg] = useState(null);
@@ -50,8 +51,11 @@ const Registration = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <KeyboardAwareScrollView>
+    <ImageBackground
+      style={styles.bgImage}
+      source={bgImagePath}
+    >
+      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <View style={styles.form}>
           <View style={styles.userPhoto}>
             {userImg && <Image style={styles.addBtn} source={userImg} />}
@@ -65,11 +69,7 @@ const Registration = () => {
 
           <Text style={styles.title}>Реєстрація</Text>
 
-          <KeyboardAvoidingView
-            style={styles.inputList}
-            behavior='padding'
-            keyboardVerticalOffset={-165}
-          >
+          <View style={styles.inputList}>
             <Controller
               control={control}
               name='login'
@@ -106,7 +106,7 @@ const Registration = () => {
               isPasswordHide={isPasswordHide}
               togglePasswordShow={togglePasswordShow}
             />
-          </KeyboardAvoidingView>
+          </View>
 
           <TouchableOpacity
             style={styles.primaryBtn}
@@ -119,7 +119,7 @@ const Registration = () => {
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>
-    </View>
+    </ImageBackground>
   );
 };
 

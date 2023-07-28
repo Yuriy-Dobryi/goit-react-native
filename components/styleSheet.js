@@ -1,16 +1,20 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+  bgImage: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
+
   // REGISTRATION
   form: {
     position: "relative",
     paddingTop: 92,
     paddingRight: 16,
-    paddingBottom: 78,
+    paddingBottom: 45,
     paddingLeft: 16,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
