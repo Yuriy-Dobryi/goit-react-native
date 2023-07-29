@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 
-  // REGISTRATION
   form: {
     position: "relative",
     paddingTop: 92,

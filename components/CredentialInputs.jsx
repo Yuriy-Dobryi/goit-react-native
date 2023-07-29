@@ -5,7 +5,7 @@ import {
   Text
 } from "react-native";
 import { Controller } from "react-hook-form";
-import styles from "./styleSheet";
+import styles from "./credentialInputsStyles";
 
 function CredentialInputs({
   control,

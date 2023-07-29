@@ -1,20 +1,20 @@
 import { useState } from "react";
 import {
+  ImageBackground,
   View,
+  TouchableOpacity,
   Image,
   TextInput,
-  TouchableOpacity,
   Text,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useForm, Controller } from "react-hook-form";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import CredentialInputs from "../components/CredentialInputs";
-import styles from "../components/styleSheet";
-import addBtnImg from "../images/add.png";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ImageBackground } from "react-native";
 import bgImagePath from "../images/mountains-bg.png";
+import addBtnImg from "../images/add.png";
+import styles from "../components/credentialInputsStyles";
 
 const Registration = () => {
   const [userImg, setUserImg] = useState(null);
@@ -51,11 +51,11 @@ const Registration = () => {
   }
 
   return (
-    <ImageBackground
-      style={styles.bgImage}
-      source={bgImagePath}
-    >
-      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+    <ImageBackground style={styles.bgImage} source={bgImagePath}>
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps='handled'
+        contentContainerStyle={styles.container}
+      >
         <View style={styles.form}>
           <View style={styles.userPhoto}>
             {userImg && <Image style={styles.addBtn} source={userImg} />}
@@ -114,6 +114,7 @@ const Registration = () => {
           >
             <Text style={styles.primaryBtnText}>Зареєструватися</Text>
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.secondaryBtn}>
             <Text style={styles.secondaryBtnText}>Вже є акаунт ? Увійти</Text>
           </TouchableOpacity>

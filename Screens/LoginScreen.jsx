@@ -1,18 +1,12 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import {
-  TouchableWithoutFeedback,
-  View,
-  Text,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Keyboard,
-} from "react-native";
+import { ImageBackground, View, TouchableOpacity, Text } from "react-native";
 import { useForm } from "react-hook-form";
-import { StyleSheet } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import CredentialInputs from "../components/CredentialInputs";
-import styles from "../components/styleSheet";
+import bgImagePath from "../images/mountains-bg.png";
+import styles from "../components/credentialInputsStyles";
 
 function LoginScreen() {
   const { control, handleSubmit } = useForm({
@@ -34,17 +28,16 @@ function LoginScreen() {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styless.container}>
+    <ImageBackground style={styles.bgImage} source={bgImagePath}>
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps='handled'
+        contentContainerStyle={styles.container}
+      >
         <View style={[styles.form, { paddingTop: 32 }]}>
           <Text style={styles.title}>Увійти</Text>
 
-          {/* email and password inputs */}
-          <KeyboardAvoidingView
-            style={styles.inputList}
-            behavior='padding'
-            keyboardVerticalOffset='250'
-          >
+          <View style={styles.inputList}>
+            {/* email and password inputs */}
             <CredentialInputs
               control={control}
               focusedField={focusedField}
@@ -52,7 +45,7 @@ function LoginScreen() {
               isPasswordHide={isPasswordHide}
               togglePasswordShow={togglePasswordShow}
             />
-          </KeyboardAvoidingView>
+          </View>
 
           <TouchableOpacity
             style={styles.primaryBtn}
@@ -67,16 +60,9 @@ function LoginScreen() {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </KeyboardAwareScrollView>
+    </ImageBackground>
   );
 }
-
-const styless = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-});
 
 export default LoginScreen;
