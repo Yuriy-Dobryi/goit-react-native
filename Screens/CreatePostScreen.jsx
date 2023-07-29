@@ -1,6 +1,8 @@
+import { useState } from "react";
 import {
   TouchableWithoutFeedback,
   View,
+  TouchableOpacity,
   Pressable,
   Image,
   Text,
@@ -8,33 +10,54 @@ import {
   Keyboard,
   StyleSheet,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useState } from "react";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 export default function CreatePostScreen() {
-  const [uriImg, setUriImg] = useState(null);
+  const [image, setImage] = useState(null);
   const allFieldsFilled = false;
+
+  async function selectImg() {
+    const permissionResult = await ImagePicker.getMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert("Permission to access image library roll is required!");
+      return;
+    }
+
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      quality: 1,
+      allowsEditing: true,
+    });
+    if (!pickerResult.canceled) {
+      setImage(pickerResult.assets[0].uri);
+    }
+  }
+
+  function removeImg() {
+    setImage(null);
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <KeyboardAwareScrollView keyboardShouldPersistTaps='handled'>
-          {uriImg ? (
-            <Image source={{ uri: uriImg }} style={styles.imageWrapper} />
-          ) : (
-            <View style={styles.imageWrapper}>
-              <View style={styles.photoView}>
-                <Pressable
-                  style={styles.cameraBtn}
-                >
-                  <FontAwesome name='camera' size={24} color='#BDBDBD' />
-                </Pressable>
-              </View>
+          <TouchableOpacity
+            style={styles.imageWrapper}
+            onPress={image ? removeImg : selectImg}
+          >
+            {image && (
+              <Image style={styles.imageWrapper} source={{ uri: image }} />
+            )}
+
+            <View style={styles.cameraBtn}>
+              <FontAwesome name='camera' size={24} color='#BDBDBD' />
             </View>
-          )}
-          {uriImg && <Text style={styles.text}>Редагувати фото</Text>}
-          {!uriImg && <Text style={styles.text}>Завантажте фото</Text>}
+          </TouchableOpacity>
+
+          <Text style={styles.text}>
+            {image ? "Редагувати фото" : "Завантажте фото"}
+          </Text>
           <View style={styles.inputBox}>
             <View style={styles.inputWrapper}>
               <TextInput
@@ -66,9 +89,7 @@ export default function CreatePostScreen() {
           </Text>
         </Pressable>
 
-        <Pressable
-          style={styles.resetBtn}
-        >
+        <Pressable style={styles.resetBtn}>
           <Feather name='trash-2' size={24} color='#BDBDBD' />
         </Pressable>
       </View>
@@ -78,10 +99,11 @@ export default function CreatePostScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffffff",
+    flex: 1,
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 32,
+    backgroundColor: "#fff",
   },
   imageWrapper: {
     height: 240,
@@ -92,20 +114,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
   },
-  photoView: {
-    backgroundColor: "transparent",
-    justifyContent: "center",
-    borderRadius: 8,
-  },
-  cameraImg: {
-    width: 24,
-    height: 24,
-  },
   cameraBtn: {
-    alignItems: "center",
-    justifyContent: "center",
     width: 60,
     height: 60,
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#fff",
     borderRadius: 50,
   },
@@ -125,7 +138,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#E8E8E8",
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 50,
     fontSize: 16,
     color: "#212121",

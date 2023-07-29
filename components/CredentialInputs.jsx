@@ -1,9 +1,4 @@
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text
-} from "react-native";
+import { View, TextInput, TouchableOpacity, Text } from "react-native";
 import { Controller } from "react-hook-form";
 import styles from "./credentialInputsStyles";
 
@@ -29,6 +24,7 @@ function CredentialInputs({
                 styles.input,
                 focusedField === "email" && styles.inputFocused,
               ]}
+              inputMode='email'
               placeholder='Адреса електронної пошти'
               onChangeText={onChange}
               onFocus={() => setFocusedField("email")}
@@ -79,6 +75,6 @@ function CredentialInputs({
       />
     </>
   );
-};
+}
 
 export default CredentialInputs;

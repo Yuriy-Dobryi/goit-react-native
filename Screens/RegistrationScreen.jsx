@@ -11,10 +11,11 @@ import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useForm, Controller } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Ionicons } from "@expo/vector-icons";
 
 import CredentialInputs from "../components/CredentialInputs";
 import bgImagePath from "../images/mountains-bg.png";
+import addIcon from "../images/add-icon.png";
+import removeIcon from "../images/remove-icon.png";
 import styles from "../components/credentialInputsStyles";
 
 const Registration = () => {
@@ -30,23 +31,28 @@ const Registration = () => {
   const { navigate } = useNavigation();
 
   async function selectImg() {
-    let permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) {
-      alert("Permission to access camera roll is required!");
+    const permissionResult = await ImagePicker.getMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert("Permission to access image library roll is required!");
       return;
     }
-    const pickerResult = await ImagePicker.launchImageLibraryAsync();
+    
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      quality: 1,
+      allowsEditing: true,
+    });
     if (!pickerResult.canceled) {
-      setUserImg(pickerResult.uri);
+      setUserImg(pickerResult.assets[0].uri);
     }
   }
+
   function removeImg() {
-    setUserImg("");
+    setUserImg(null);
   }
 
   function onSubmit(data) {
-    console.log(data);
+    // console.log(data); не забути про trim
+    navigate("Home");
   }
   function togglePasswordShow() {
     setShowPassword(!isPasswordHide);
@@ -60,16 +66,18 @@ const Registration = () => {
       >
         <View style={styles.form}>
           <TouchableOpacity
-            style={styles.userPhoto}
+            style={styles.userPhotoWrapper}
             onPress={userImg ? removeImg : selectImg}
           >
-            {userImg && <Image source={userImg} />}
-            <Ionicons
-              name={userImg ? "close-circle" : "add-circle-outline"}
-              size={25}
-              color={userImg ? "#1B4371" : "#FF6C00"}
-              style={styles.photoBtnPosition}
-            />
+            {userImg && (
+              <Image style={styles.userPhoto} source={{ uri: userImg }} />
+            )}
+            <View style={styles.photoBtnPosition}>
+              <Image
+                source={userImg ? removeIcon : addIcon}
+                style={{ width: 30, height: 30 }}
+              />
+            </View>
           </TouchableOpacity>
 
           <Text style={styles.title}>Реєстрація</Text>

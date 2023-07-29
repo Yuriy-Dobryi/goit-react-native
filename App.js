@@ -7,62 +7,61 @@ import LoginScreen from "./Screens/LoginScreen";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import Home from "./Screens/Home";
 import CommentsScreen from "./Screens/CommentsScreen";
-import MapScreen from "./Screens/MapScreen";;
+import MapScreen from "./Screens/MapScreen";
 
 const MainStack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-
-        <MainStack.Navigator initialRouteName='Registration'>
-          <MainStack.Screen
-            name='Login'
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <MainStack.Screen
-            name='Registration'
-            component={RegistrationScreen}
-            options={{ headerShown: false }}
-          />
-          <MainStack.Screen
-            name='Home'
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <MainStack.Screen
-            name='CommentsScreen'
-            component={CommentsScreen}
-            options={{
-              title: "Коментарі",
-              headerStyle: {
-                backgroundColor: "#FFFFFF",
-              },
-              headerTitleStyle: {
-                fontWeight: 500,
-                fontSize: 17,
-                lineHeight: 22,
-              },
-            }}
-          />
-          <MainStack.Screen
-            name='MapScreen'
-            component={MapScreen}
-            options={{
-              title: "Карта",
-              headerStyle: {
-                backgroundColor: "#FFFFFF",
-              },
-              headerTitleStyle: {
-                fontWeight: 500,
-                fontSize: 17,
-                lineHeight: 22,
-              },
-            }}
-          />
-        </MainStack.Navigator>
-        <StatusBar style='auto' />
+      <MainStack.Navigator initialRouteName='Home'>
+        <MainStack.Screen
+          name='Login'
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name='Registration'
+          component={RegistrationScreen}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name='Home'
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name='CommentsScreen'
+          component={CommentsScreen}
+          options={{
+            title: "Коментарі",
+            headerStyle: {
+              backgroundColor: "#FFFFFF",
+            },
+            headerTitleStyle: {
+              fontWeight: 500,
+              fontSize: 17,
+              lineHeight: 22,
+            },
+          }}
+        />
+        <MainStack.Screen
+          name='MapScreen'
+          component={MapScreen}
+          options={{
+            title: "Карта",
+            headerStyle: {
+              backgroundColor: "#FFFFFF",
+            },
+            headerTitleStyle: {
+              fontWeight: 500,
+              fontSize: 17,
+              lineHeight: 22,
+            },
+          }}
+        />
+      </MainStack.Navigator>
+      <StatusBar style='auto' />
     </NavigationContainer>
   );
 }

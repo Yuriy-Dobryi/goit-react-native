@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
   },
 
-  userPhoto: {
+  userPhotoWrapper: {
     position: "absolute",
     top: 0,
     left: "50%",
@@ -30,9 +30,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     borderRadius: 16,
   },
+  userPhoto: {
+    height: "100%",
+    borderRadius: 16,
+  },
   photoBtnPosition: {
     position: "absolute",
-    right: -12,
+    zIndex: 69,
+    right: -14,
     bottom: 14,
   },
 
@@ -51,6 +56,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingHorizontal: 16,
     backgroundColor: "#F6F6F6",
+    color: "#212121",
     borderWidth: 1,
     borderColor: "#E8E8E8",
     borderRadius: 8,
