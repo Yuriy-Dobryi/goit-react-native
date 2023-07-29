@@ -17,11 +17,11 @@ function LoginScreen() {
   });
   const [focusedField, setFocusedField] = useState(false);
   const [isPasswordHide, setShowPassword] = useState(true);
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
 
   function onSubmit(data) {
     console.log(data);
-    navigation.navigate("Home");
+    navigate("Home");
   }
   function togglePasswordShow() {
     setShowPassword(!isPasswordHide);
@@ -54,7 +54,10 @@ function LoginScreen() {
             <Text style={styles.primaryBtnText}>Увійти</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.secondaryBtn}>
+          <TouchableOpacity
+            style={styles.secondaryBtn}
+            onPress={() => navigate("Registration")}
+          >
             <Text style={styles.secondaryBtnText}>
               Немає акаунту? Зареєструватися
             </Text>

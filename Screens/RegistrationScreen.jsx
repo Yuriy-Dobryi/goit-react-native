@@ -7,13 +7,14 @@ import {
   TextInput,
   Text,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useForm, Controller } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Ionicons } from "@expo/vector-icons";
 
 import CredentialInputs from "../components/CredentialInputs";
 import bgImagePath from "../images/mountains-bg.png";
-import addBtnImg from "../images/add.png";
 import styles from "../components/credentialInputsStyles";
 
 const Registration = () => {
@@ -26,6 +27,7 @@ const Registration = () => {
   });
   const [focusedField, setFocusedField] = useState(false);
   const [isPasswordHide, setShowPassword] = useState(true);
+  const { navigate } = useNavigation();
 
   async function selectImg() {
     let permissionResult =
@@ -57,15 +59,18 @@ const Registration = () => {
         contentContainerStyle={styles.container}
       >
         <View style={styles.form}>
-          <View style={styles.userPhoto}>
-            {userImg && <Image style={styles.addBtn} source={userImg} />}
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={userImg ? removeImg : selectImg}
-            >
-              <Image source={addBtnImg} />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={styles.userPhoto}
+            onPress={userImg ? removeImg : selectImg}
+          >
+            {userImg && <Image source={userImg} />}
+            <Ionicons
+              name={userImg ? "close-circle" : "add-circle-outline"}
+              size={25}
+              color={userImg ? "#1B4371" : "#FF6C00"}
+              style={styles.photoBtnPosition}
+            />
+          </TouchableOpacity>
 
           <Text style={styles.title}>Реєстрація</Text>
 
@@ -115,7 +120,10 @@ const Registration = () => {
             <Text style={styles.primaryBtnText}>Зареєструватися</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.secondaryBtn}>
+          <TouchableOpacity
+            style={styles.secondaryBtn}
+            onPress={() => navigate("Login")}
+          >
             <Text style={styles.secondaryBtnText}>Вже є акаунт ? Увійти</Text>
           </TouchableOpacity>
         </View>

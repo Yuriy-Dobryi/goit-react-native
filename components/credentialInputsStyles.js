@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     position: "relative",
     paddingTop: 92,
     paddingRight: 16,
-    paddingBottom: 45,
+    paddingBottom: 10,
     paddingLeft: 16,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
@@ -30,12 +30,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     borderRadius: 16,
   },
-  addBtn: {
+  photoBtnPosition: {
     position: "absolute",
     right: -12,
     bottom: 14,
-    width: 25,
-    height: 25,
   },
 
   title: {
@@ -75,9 +73,7 @@ const styles = StyleSheet.create({
   primaryBtn: {
     alignItems: "center",
     marginTop: 43,
-    marginBottom: 16,
     paddingVertical: 16,
-    paddingHorizontal: 32,
     backgroundColor: "#FF6C00",
     borderRadius: 100,
   },
@@ -87,6 +83,8 @@ const styles = StyleSheet.create({
   },
 
   secondaryBtn: {
+    paddingTop: 16,
+    paddingBottom: 32,
     alignItems: "center",
   },
   secondaryBtnText: {

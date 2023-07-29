@@ -8,7 +8,7 @@ import CreatePostScreen from "./CreatePostScreen";
 import ProfileScreen from "./ProfileScreen";
 
 const Tabs = createBottomTabNavigator();
-
+ 
 export default function Home() {
   const navigation = useNavigation();
 
