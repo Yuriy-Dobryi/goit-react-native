@@ -1,13 +1,10 @@
 import { useState } from "react";
 import {
-  TouchableWithoutFeedback,
   View,
   TouchableOpacity,
-  Pressable,
   Image,
-  Text,
   TextInput,
-  Keyboard,
+  Text,
   StyleSheet,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -15,11 +12,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 export default function CreatePostScreen() {
-  const [image, setImage] = useState(null);
-  const allFieldsFilled = false;
+  const [imagePath, setImagePath] = useState(null);
+  const isDataFilled = imagePath;
 
   async function selectImg() {
-    const permissionResult = await ImagePicker.getMediaLibraryPermissionsAsync();
+    const permissionResult =
+      await ImagePicker.getMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert("Permission to access image library roll is required!");
       return;
@@ -30,70 +28,72 @@ export default function CreatePostScreen() {
       allowsEditing: true,
     });
     if (!pickerResult.canceled) {
-      setImage(pickerResult.assets[0].uri);
+      setImagePath(pickerResult.assets[0].uri);
     }
   }
 
   function removeImg() {
-    setImage(null);
+    setImagePath(null);
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <KeyboardAwareScrollView keyboardShouldPersistTaps='handled'>
-          <TouchableOpacity
-            style={styles.imageWrapper}
-            onPress={image ? removeImg : selectImg}
-          >
-            {image && (
-              <Image style={styles.imageWrapper} source={{ uri: image }} />
-            )}
+    <KeyboardAwareScrollView
+      style={styles.container}
+      keyboardShouldPersistTaps='handled'
+    >
+      <TouchableOpacity
+        style={styles.imgWrapper}
+        onPress={imagePath ? removeImg : selectImg}
+      >
+        {imagePath && (
+          <Image style={styles.imgSize} source={{ uri: imagePath }} />
+        )}
 
-            <View style={styles.cameraBtn}>
-              <FontAwesome name='camera' size={24} color='#BDBDBD' />
-            </View>
-          </TouchableOpacity>
+        <View style={[styles.cameraBtn, imagePath && styles.transparent]}>
+          <FontAwesome
+            name='camera'
+            size={24}
+            color={imagePath ? "#fff" : "#BDBDBD"}
+          />
+        </View>
+      </TouchableOpacity>
 
-          <Text style={styles.text}>
-            {image ? "Редагувати фото" : "Завантажте фото"}
-          </Text>
-          <View style={styles.inputBox}>
-            <View style={styles.inputWrapper}>
-              <TextInput
-                style={styles.input}
-                placeholder='Назва...'
-                placeholderTextColor='#BDBDBD'
-                inputMode='text'
-              />
-            </View>
+      <Text style={styles.text}>
+        {imagePath ? "Редагувати фото" : "Завантажте фото"}
+      </Text>
+      <View style={styles.inputsList}>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            placeholder='Назва...'
+            placeholderTextColor='#BDBDBD'
+            inputMode='text'
+          />
+        </View>
 
-            <View style={styles.inputWrapper}>
-              <Feather name='map-pin' size={24} color='#BDBDBD' />
-              <TextInput
-                style={styles.input}
-                placeholder='Місцевість...'
-                placeholderTextColor='#BDBDBD'
-                inputMode='text'
-              />
-            </View>
-          </View>
-        </KeyboardAwareScrollView>
-        <Pressable
-          style={[styles.submitBtn, allFieldsFilled && styles.activeBtn]}
-        >
-          <Text
-            style={[styles.submitBtnText, allFieldsFilled && styles.textActive]}
-          >
-            Опубліковати
-          </Text>
-        </Pressable>
-
-        <Pressable style={styles.resetBtn}>
-          <Feather name='trash-2' size={24} color='#BDBDBD' />
-        </Pressable>
+        <View style={styles.inputWrapper}>
+          <Feather name='map-pin' size={24} color='#BDBDBD' />
+          <TextInput
+            style={styles.input}
+            placeholder='Місцевість...'
+            placeholderTextColor='#BDBDBD'
+            inputMode='text'
+          />
+        </View>
       </View>
-    </TouchableWithoutFeedback>
+
+      <TouchableOpacity
+        style={[styles.submitBtn, isDataFilled && styles.activeBtn]}
+      >
+        <Text style={[styles.submitBtnText, isDataFilled && styles.activeText]}>
+          Опубліковати
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.resetBtn}>
+        <Feather name='trash-2' size={24} color='#BDBDBD' />
+      </TouchableOpacity>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     backgroundColor: "#fff",
   },
-  imageWrapper: {
+  imgWrapper: {
     height: 240,
     justifyContent: "center",
     alignItems: "center",
@@ -114,7 +114,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
   },
+  imgSize: {
+    width: "100%",
+    height: "100%",
+  },
   cameraBtn: {
+    position: "absolute",
     width: 60,
     height: 60,
     alignItems: "center",
@@ -122,18 +127,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 50,
   },
+  transparent: {
+    backgroundColor: "rgba(255, 255, 255, 0.30)",
+  },
   text: {
     marginTop: 8,
     color: "#BDBDBD",
     fontSize: 16,
   },
-  inputBox: {
+  inputsList: {
+    rowGap: 16,
     marginVertical: 32,
   },
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#E8E8E8",
   },
@@ -141,6 +149,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50,
     fontSize: 16,
+    fontWeight: "500",
     color: "#212121",
   },
   submitBtn: {
@@ -157,17 +166,17 @@ const styles = StyleSheet.create({
     color: "#BDBDBD",
     fontSize: 16,
   },
-  textActive: {
+  activeText: {
     color: "#ffffff",
   },
   resetBtn: {
-    alignItems: "center",
-    justifyContent: "center",
     width: 70,
     height: 40,
+    alignItems: "center",
+    justifyContent: "center",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 15,
+    marginTop: 16,
     backgroundColor: "#F6F6F6",
     borderRadius: 20,
   },

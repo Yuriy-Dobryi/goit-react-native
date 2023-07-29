@@ -130,6 +130,7 @@ const Registration = () => {
 
           <TouchableOpacity
             style={styles.secondaryBtn}
+            hitSlop={{ top: 16, bottom: 32 }}
             onPress={() => navigate("Login")}
           >
             <Text style={styles.secondaryBtnText}>Вже є акаунт ? Увійти</Text>

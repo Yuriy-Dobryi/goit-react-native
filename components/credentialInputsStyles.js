@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
   form: {
     position: "relative",
     paddingTop: 92,
+    paddingBottom: 45,
     paddingRight: 16,
-    paddingBottom: 10,
     paddingLeft: 16,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
@@ -89,8 +89,7 @@ const styles = StyleSheet.create({
   },
 
   secondaryBtn: {
-    paddingTop: 16,
-    paddingBottom: 32,
+    marginTop: 16,
     alignItems: "center",
   },
   secondaryBtnText: {

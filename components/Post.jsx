@@ -1,76 +1,78 @@
-import { View, StyleSheet, Image, Text, Pressable } from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome, AntDesign, Feather } from "@expo/vector-icons";
 
 export default function Post({ post }) {
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
   const isAnyComment = post.comments.length > 0;
   const isAnyLike = post.likes > 0;
 
   return (
-    <View key={post.id} style={{ marginBottom: 32 }}>
-      <Image source={post.image} style={{ borderRadius: 8 }} />
+    <View key={post.id} style={styles.postItem}>
+      <Image source={post.image} style={styles.picture} />
       <Text style={styles.title}>{post.name}</Text>
 
-      <View style={styles.statistics}>
-        <View style={{ flexDirection: "row", gap: 24 }}>
-          <Pressable
+      <View style={styles.info}>
+        <View style={styles.statistics}>
+          <TouchableOpacity style={styles.statItem}
             onPress={() =>
-              navigation.navigate("CommentsScreen", {
+              navigate("CommentsScreen", {
                 postComments: post.comments,
                 postImg: post.image,
               })
             }
           >
-            <View style={styles.statItem}>
-              <FontAwesome
-                name={isAnyComment ? "comment" : "comment-o"}
-                size={24}
-                color={isAnyComment ? "#FF6C00" : "#BDBDBD"}
-              />
-              <Text style={styles.statText}>{post.comments.length}</Text>
-            </View>
-          </Pressable>
+            <FontAwesome
+              name={isAnyComment ? "comment" : "comment-o"}
+              size={24}
+              color={isAnyComment ? "#FF6C00" : "#BDBDBD"}
+            />
+            <Text style={[styles.statText, !isAnyComment && styles.transparent]}>
+              {post.comments.length}
+            </Text>
+          </TouchableOpacity>
 
           {isAnyLike && (
-            <Pressable onPress={() => console.log("liked")}>
-              <View style={styles.statItem}>
-                <AntDesign name='like2' size={24} color='#FF6C00' />
-                <Text style={styles.statText}>{post.likes}</Text>
-              </View>
-            </Pressable>
+            <TouchableOpacity style={styles.statItem}
+              onPress={() => console.log("liked")}
+            >
+              <AntDesign name='like2' size={24} color='#FF6C00' />
+              <Text style={styles.statText}>{post.likes}</Text>
+            </TouchableOpacity>
           )}
         </View>
 
-        <Pressable
-          onPress={() =>
-            navigation.navigate("MapScreen", { postLocation: post.location })
-          }
+        <TouchableOpacity style={styles.statItem}
+          onPress={() => navigate("MapScreen", { postLocation: post.location })}
         >
-          <View style={styles.statItem}>
-            <Feather name='map-pin' size={24} color='#BDBDBD' />
-            <Text
-              style={{ ...styles.statText, textDecorationLine: "underline" }}
-            >
-              {post.place}
-            </Text>
-          </View>
-        </Pressable>
+          <Feather name='map-pin' size={24} color='#BDBDBD' />
+          <Text style={[styles.statText, styles.underline]}>{post.place}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  postItem: {
+    marginBottom: 32,
+  },
+  picture: {
+    borderRadius: 8,
+  },
   title: {
     marginVertical: 8,
     color: "#212121",
     fontSize: 16,
     fontWeight: 500,
   },
-  statistics: {
+  info: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  statistics: {
+    flexDirection: "row",
+    columnGap: 24,
   },
   statItem: {
     flexDirection: "row",
@@ -80,5 +82,11 @@ const styles = StyleSheet.create({
     color: "#212121",
     fontSize: 16,
     marginLeft: 6,
+  },
+  transparent: {
+    color: "#BDBDBD",
+  },
+  underline: {
+    textDecorationLine: "underline",
   },
 });

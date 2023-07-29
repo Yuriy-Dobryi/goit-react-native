@@ -13,7 +13,7 @@ export default function PostsScreen() {
             <Text style={styles.userEmail}>email@example.com</Text>
           </View>
         </View>
-        <View style={{paddingBottom: 43}}>
+        <View style={styles.postsList}>
           {posts.map((post) => {
             return <Post key={post.id} post={post} />;
           })}
@@ -46,5 +46,8 @@ const styles = StyleSheet.create({
   userEmail: {
     color: "#212121",
     fontSize: 11,
+  },
+  postsList: {
+    paddingBottom: 42,
   },
 });

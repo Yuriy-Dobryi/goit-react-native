@@ -56,6 +56,7 @@ function LoginScreen() {
 
           <TouchableOpacity
             style={styles.secondaryBtn}
+            hitSlop={{ top: 16, bottom: 32 }}
             onPress={() => navigate("Registration")}
           >
             <Text style={styles.secondaryBtnText}>

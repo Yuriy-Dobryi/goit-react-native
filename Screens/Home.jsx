@@ -8,9 +8,9 @@ import CreatePostScreen from "./CreatePostScreen";
 import ProfileScreen from "./ProfileScreen";
 
 const Tabs = createBottomTabNavigator();
- 
+
 export default function Home() {
-  const navigation = useNavigation();
+  const { goBack, navigate } = useNavigation();
 
   const tabBarIcon = (name, color) => (
     <Feather name={name} size={24} color={color} />
@@ -19,33 +19,39 @@ export default function Home() {
   const goBackBtn = (
     <TouchableOpacity
       style={{ marginLeft: 16 }}
-      onPress={() => navigation.goBack()}
+      hitSlop={{ left: 16, right: 32 }}
+      onPress={goBack}
     >
       {tabBarIcon("arrow-left", "#212121")}
     </TouchableOpacity>
   );
 
   const logOutButton = (
-    <TouchableOpacity style={{ marginRight: 16 }}>
+    <TouchableOpacity
+      style={{ marginRight: 16 }}
+      hitSlop={{ left: 32, right: 16 }}
+      onPress={() => navigate("Login")}
+    >
       {tabBarIcon("log-out", "#BDBDBD")}
     </TouchableOpacity>
   );
 
   return (
     <Tabs.Navigator
-      initialRouteName='CreatePostScreen'
+      initialRouteName='Home'
       screenOptions={{
         tabBarStyle: {
-          height: 83,
+          height: 70,
           paddingHorizontal: 70,
-          paddingTop: 9,
-          paddingBottom: 34,
+          paddingTop: 10,
         },
         tabBarShowLabel: false,
         tabBarActiveBackgroundColor: "#FF6C00",
         tabBarActiveTintColor: "#ffffff",
         tabBarInactiveTintColor: "rgba(33, 33, 33, 0.8)",
         tabBarItemStyle: {
+          width: 70,
+          height: 40,
           borderRadius: 20,
         },
         headerTitleStyle: {
