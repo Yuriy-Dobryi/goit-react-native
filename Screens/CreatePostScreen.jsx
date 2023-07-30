@@ -80,13 +80,17 @@ export default function CreatePostScreen() {
       <Text style={styles.text}>
         {photoPath ? "Редагувати фото" : "Завантажте фото"}
       </Text>
+      {/* {photoPath && (
+        <Text style={styles.text}>
+          {userLocation ? userLocation.coords.altitude : "WAITING"}
+        </Text>
+      )} */}
       <View style={styles.inputsList}>
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.input}
             placeholder='Назва...'
             placeholderTextColor='#BDBDBD'
-            inputMode='text'
           />
         </View>
 
@@ -96,7 +100,6 @@ export default function CreatePostScreen() {
             style={styles.input}
             placeholder='Місцевість...'
             placeholderTextColor='#BDBDBD'
-            inputMode='text'
           />
         </View>
       </View>
