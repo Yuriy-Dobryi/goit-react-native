@@ -30,7 +30,7 @@ const Registration = () => {
   const [isPasswordHide, setShowPassword] = useState(true);
   const { navigate } = useNavigation();
 
-  async function selectImg() {
+  async function selectPhoto() {
     const permissionResult = await ImagePicker.getMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert("Permission to access image library roll is required!");
@@ -40,13 +40,14 @@ const Registration = () => {
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
       quality: 1,
       allowsEditing: true,
+      allowsMultipleSelection: false,
     });
     if (!pickerResult.canceled) {
       setUserImg(pickerResult.assets[0].uri);
     }
   }
 
-  function removeImg() {
+  function removePhoto() {
     setUserImg(null);
   }
 
@@ -67,7 +68,7 @@ const Registration = () => {
         <View style={styles.form}>
           <TouchableOpacity
             style={styles.userPhotoWrapper}
-            onPress={userImg ? removeImg : selectImg}
+            onPress={userImg ? removePhoto : selectPhoto}
           >
             {userImg && (
               <Image style={styles.userPhoto} source={{ uri: userImg }} />

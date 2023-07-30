@@ -15,24 +15,28 @@ export default function CreatePostScreen() {
   const [imagePath, setImagePath] = useState(null);
   const isDataFilled = imagePath;
 
-  async function selectImg() {
-    const permissionResult =
-      await ImagePicker.getMediaLibraryPermissionsAsync();
+  async function makePhoto() {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     if (!permissionResult.granted) {
       alert("Permission to access image library roll is required!");
       return;
     }
 
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+    const pickerResult = await ImagePicker.launchCameraAsync({
       quality: 1,
       allowsEditing: true,
+      allowsMultipleSelection: false,
     });
     if (!pickerResult.canceled) {
       setImagePath(pickerResult.assets[0].uri);
     }
   }
 
-  function removeImg() {
+  function removePhoto() {
+    setImagePath(null);
+  }
+
+  function resetData() {
     setImagePath(null);
   }
 
@@ -43,7 +47,7 @@ export default function CreatePostScreen() {
     >
       <TouchableOpacity
         style={styles.imgWrapper}
-        onPress={imagePath ? removeImg : selectImg}
+        onPress={imagePath ? removePhoto : makePhoto}
       >
         {imagePath && (
           <Image style={styles.imgSize} source={{ uri: imagePath }} />
@@ -90,7 +94,7 @@ export default function CreatePostScreen() {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.resetBtn}>
+      <TouchableOpacity style={styles.resetBtn} onPress={resetData}>
         <Feather name='trash-2' size={24} color='#BDBDBD' />
       </TouchableOpacity>
     </KeyboardAwareScrollView>
