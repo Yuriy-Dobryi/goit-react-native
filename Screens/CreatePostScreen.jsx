@@ -12,8 +12,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 export default function CreatePostScreen() {
-  const [imagePath, setImagePath] = useState(null);
-  const isDataFilled = imagePath;
+  const [photoPath, setPhotoPath] = useState(null);
+  const isDataFilled = photoPath;
 
   async function makePhoto() {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -28,16 +28,16 @@ export default function CreatePostScreen() {
       allowsMultipleSelection: false,
     });
     if (!pickerResult.canceled) {
-      setImagePath(pickerResult.assets[0].uri);
+      setPhotoPath(pickerResult.assets[0].uri);
     }
   }
 
   function removePhoto() {
-    setImagePath(null);
+    setPhotoPath(null);
   }
 
   function resetData() {
-    setImagePath(null);
+    setPhotoPath(null);
   }
 
   return (
@@ -47,23 +47,23 @@ export default function CreatePostScreen() {
     >
       <TouchableOpacity
         style={styles.imgWrapper}
-        onPress={imagePath ? removePhoto : makePhoto}
+        onPress={photoPath ? removePhoto : makePhoto}
       >
-        {imagePath && (
-          <Image style={styles.imgSize} source={{ uri: imagePath }} />
+        {photoPath && (
+          <Image style={styles.imgSize} source={{ uri: photoPath }} />
         )}
 
-        <View style={[styles.cameraBtn, imagePath && styles.transparent]}>
+        <View style={[styles.cameraBtn, photoPath && styles.transparent]}>
           <FontAwesome
             name='camera'
             size={24}
-            color={imagePath ? "#fff" : "#BDBDBD"}
+            color={photoPath ? "#fff" : "#BDBDBD"}
           />
         </View>
       </TouchableOpacity>
 
       <Text style={styles.text}>
-        {imagePath ? "Редагувати фото" : "Завантажте фото"}
+        {photoPath ? "Редагувати фото" : "Завантажте фото"}
       </Text>
       <View style={styles.inputsList}>
         <View style={styles.inputWrapper}>

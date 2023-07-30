@@ -17,8 +17,7 @@ export default function Post({ post }) {
           <TouchableOpacity style={styles.statItem}
             onPress={() =>
               navigate("CommentsScreen", {
-                postComments: post.comments,
-                postImg: post.image,
+                postId: post.id,
               })
             }
           >

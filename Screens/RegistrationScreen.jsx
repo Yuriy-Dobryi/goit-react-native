@@ -19,7 +19,7 @@ import removeIcon from "../images/remove-icon.png";
 import styles from "../components/credentialInputsStyles";
 
 const Registration = () => {
-  const [userImg, setUserImg] = useState(null);
+  const [photoPath, setPhotoPath] = useState(null);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       email: "",
@@ -43,12 +43,12 @@ const Registration = () => {
       allowsMultipleSelection: false,
     });
     if (!pickerResult.canceled) {
-      setUserImg(pickerResult.assets[0].uri);
+      setPhotoPath(pickerResult.assets[0].uri);
     }
   }
 
   function removePhoto() {
-    setUserImg(null);
+    setPhotoPath(null);
   }
 
   function onSubmit(data) {
@@ -68,14 +68,14 @@ const Registration = () => {
         <View style={styles.form}>
           <TouchableOpacity
             style={styles.userPhotoWrapper}
-            onPress={userImg ? removePhoto : selectPhoto}
+            onPress={photoPath ? removePhoto : selectPhoto}
           >
-            {userImg && (
-              <Image style={styles.userPhoto} source={{ uri: userImg }} />
+            {photoPath && (
+              <Image style={styles.userPhoto} source={{ uri: photoPath }} />
             )}
             <View style={styles.photoBtnPosition}>
               <Image
-                source={userImg ? removeIcon : addIcon}
+                source={photoPath ? removeIcon : addIcon}
                 style={{ width: 30, height: 30 }}
               />
             </View>

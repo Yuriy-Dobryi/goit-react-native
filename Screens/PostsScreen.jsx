@@ -1,24 +1,24 @@
 import { View, ScrollView, StyleSheet, Image, Text } from "react-native";
 import Post from "../components/Post";
 import posts from "../data/postsData";
-import userPhoto from "../images/user-photo.jpg";
+import profileOwner from "../images/profile-owner.jpg";
 
 export default function PostsScreen() {
   return (
-      <ScrollView style={styles.container}>
-        <View style={styles.profile}>
-          <Image source={userPhoto} style={styles.userImage} />
-          <View>
-            <Text style={styles.userLogin}>Natali Romanova</Text>
-            <Text style={styles.userEmail}>email@example.com</Text>
-          </View>
+    <ScrollView style={styles.container}>
+      <View style={styles.profile}>
+        <Image source={profileOwner} style={styles.userImage} />
+        <View>
+          <Text style={styles.userLogin}>Natali Romanova</Text>
+          <Text style={styles.userEmail}>email@example.com</Text>
         </View>
-        <View style={styles.postsList}>
-          {posts.map((post) => {
-            return <Post key={post.id} post={post} />;
-          })}
-        </View>
-      </ScrollView>
+      </View>
+      <View style={styles.postsList}>
+        {posts.map((post) => {
+          return <Post key={post.id} post={post} />;
+        })}
+      </View>
+    </ScrollView>
   );
 }
 

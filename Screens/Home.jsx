@@ -38,7 +38,7 @@ export default function Home() {
 
   return (
     <Tabs.Navigator
-      initialRouteName='CreatePostScreen'
+      initialRouteName='PostsScreen'
       screenOptions={{
         tabBarStyle: {
           height: 70,

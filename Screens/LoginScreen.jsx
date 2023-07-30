@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import CredentialInputs from "../components/CredentialInputs";
-import bgImagePath from "../images/mountains-bg.png";
+import bgImage from "../images/mountains-bg.png";
 import styles from "../components/credentialInputsStyles";
 
 function LoginScreen() {
@@ -28,7 +28,7 @@ function LoginScreen() {
   }
 
   return (
-    <ImageBackground style={styles.bgImage} source={bgImagePath}>
+    <ImageBackground style={styles.bgImage} source={bgImage}>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps='handled'
         contentContainerStyle={styles.container}
