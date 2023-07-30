@@ -1,5 +1,5 @@
 import { View, ScrollView, StyleSheet, Image, Text } from "react-native";
-import Post from "../components/Post";
+import PostItem from "../components/PostItem";
 import posts from "../data/postsData";
 import profileOwner from "../images/profile-owner.jpg";
 
@@ -15,7 +15,7 @@ export default function PostsScreen() {
       </View>
       <View style={styles.postsList}>
         {posts.map((post) => {
-          return <Post key={post.id} post={post} />;
+          return <PostItem key={post.id} post={post} />;
         })}
       </View>
     </ScrollView>

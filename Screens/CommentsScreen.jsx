@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   View,
   ScrollView,
@@ -11,16 +11,17 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons"; 
+import { Ionicons } from "@expo/vector-icons";
 
-import Comment from "../components/Comment";
+import CommentItem from "../components/CommentItem";
 import posts from "../data/postsData";
 import defaultPhoto from "../images/forest.jpg";
 
-export default function CommentsScreen({ route: { params } }) {
+export default function CommentsScreen() {
   const [photoPath, setPhotoPath] = useState(null);
   const navigation = useNavigation();
   const { canGoBack, goBack, navigate } = navigation;
+  const { params } = useRoute();
   const currentPost = posts.find((postItem) => postItem.id === params.postId);
   const isAnyComment = currentPost.comments.length > 0;
 
@@ -40,35 +41,34 @@ export default function CommentsScreen({ route: { params } }) {
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
-      <View style={styles.commentContent}>
+      <ScrollView scrollIndicatorInsets={{ right: -5 }}>
         <Image
           styles={styles.photo}
           source={photoPath ? { uri: photoPath } : defaultPhoto}
         />
-        {!isAnyComment && (
-          <Text style={{ color: "#BDBDBD", textAlign: "center" }}>
-            Під цим постом поки що немає коментарів.
+        {isAnyComment ? (
+          <View style={styles.commentsList}>
+            {currentPost.comments.map((comment) => (
+              <CommentItem key={comment.id} comment={comment} />
+            ))}
+          </View>
+        ) : (
+          <Text style={styles.infoForUser}>
+            Відгуки щодо даного допису відсутні.
           </Text>
         )}
-        {isAnyComment &&
-          currentPost.comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} />
-          ))}
-      </View>
+      </ScrollView>
 
-      <TextInput
-        style={styles.input}
-        placeholder='Коментувати...'
-        placeholderTextColor='#BDBDBD'
-      />
-      <TouchableOpacity>
-        <Ionicons
-          style={styles.pushBtn}
-          name='arrow-up-circle'
-          size={34}
-          color='#FF6C00'
+      <View style={styles.inputWrapper}>
+        <TextInput
+          style={styles.input}
+          placeholder='Коментувати...'
+          placeholderTextColor='#BDBDBD'
         />
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.pushBtn}>
+          <Ionicons name='arrow-up-circle' size={34} color='#FF6C00' />
+        </TouchableOpacity>
+      </View>
     </KeyboardAwareScrollView>
   );
 }
@@ -81,19 +81,25 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     backgroundColor: "#fff",
   },
-  commentContent: {
-    flex: 1,
-    rowGap: 32,
+  infoForUser: {
+    paddingTop: 32,
+    color: "#BDBDBD",
+    textAlign: "center",
+  },
+  commentsList: {
+    rowGap: 24,
+    paddingVertical: 32,
   },
   photo: {
-    width: 343,
+    width: 340,
     height: 240,
   },
+  inputWrapper: {
+    position: 'relative',
+  },
   input: {
-    alignItems: "flex-end",
     height: 50,
     paddingLeft: 16,
-
     backgroundColor: "#F6F6F6",
     borderColor: "#E8E8E8",
     borderWidth: 1,
@@ -101,9 +107,7 @@ const styles = StyleSheet.create({
   },
   pushBtn: {
     position: "absolute",
-    bottom: 8,
     right: 8,
-
-    borderRadius: 20,
+    bottom: 7,
   },
 });

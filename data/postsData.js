@@ -5,11 +5,11 @@ const posts = [
   {
     id: 1,
     name: "Ліс",
+    image: require("../images/forest.jpg"),
     place: "Ivano-Frankivsk Region",
     location: { latitude: 49.2714836, longitude: 23.8227551 },
-    comments: [],
     likes: 69,
-    image: require("../images/forest.jpg"),
+    comments: [],
   },
   {
     id: 2,
@@ -22,22 +22,25 @@ const posts = [
       {
         id: "id-1",
         avatar: user,
-        text: "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
-        date: "09 червня, 2020 | 08:40",
+        message:
+          "Wow! This is such an amazing photo. I love the colors and composition!",
+        date: "01 січня, 2022 | 10:10",
         isPostOwner: false,
       },
       {
         id: "id-2",
         avatar: profileOwner,
-        text: "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
-        date: "09 червня, 2020 | 09:40",
+        message:
+          "I was there last year! It's one of the most beautiful places I've ever seen.",
+        date: "05 червня, 2022 | 17:29",
         isPostOwner: true,
       },
       {
         id: "id-3",
         avatar: user,
-        text: "Thank you! That was very helpful!",
-        date: "09 червня, 2020 | 10:00",
+        message:
+          "Absolutely breathtaking! I wish I could take photos like this.",
+        date: "17 липня, 2023 | 10:30",
         isPostOwner: false,
       },
     ],
@@ -53,43 +56,48 @@ const posts = [
       {
         id: "id-1",
         avatar: user,
-        text: "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
-        date: "09 червня, 2020 | 08:40",
+        message:
+          "This looks like a scene from a fairytale. I'm in love with it!",
+        date: "03 жовтня, 2021 | 09:40",
         isPostOwner: false,
       },
       {
         id: "id-2",
         avatar: profileOwner,
-        text: "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
-        date: "09 червня, 2020 | 09:40",
+        message:
+          "I visited this place a few years ago. Memories came rushing back when I saw your photo.",
+        date: "09 вересня, 2022 | 16:11",
         isPostOwner: true,
       },
       {
         id: "id-3",
         avatar: user,
-        text: "Thank you! That was very helpful!",
-        date: "09 червня, 2020 | 10:00",
+        message:
+          "The lighting in this photo is just perfect. How do you achieve that?",
+        date: "17 лютого, 2023 | 14:40",
         isPostOwner: false,
       },
       {
         id: "id-4",
         avatar: profileOwner,
-        text: "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
-        date: "09 червня, 2020 | 09:40",
+        message:
+          "I always love seeing photos of this beautiful place. Great shot!",
+        date: "18 серпня, 2023 | 08:40",
         isPostOwner: true,
       },
       {
         id: "id-5",
         avatar: user,
-        text: "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
-        date: "09 червня, 2020 | 08:40",
+        message: "I wish I could live in a place like this. It's like a dream.",
+        date: "20 травня, 2021 | 12:23",
         isPostOwner: false,
       },
       {
         id: "id-6",
         avatar: profileOwner,
-        text: "Thank you! That was very helpful!",
-        date: "09 червня, 2020 | 10:00",
+        message:
+          "Such a charming little house. I could stare at this photo all day.",
+        date: "27 травня, 2022 | 11:25",
         isPostOwner: true,
       },
     ],

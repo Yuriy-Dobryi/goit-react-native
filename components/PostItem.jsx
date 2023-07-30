@@ -2,50 +2,56 @@ import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome, AntDesign, Feather } from "@expo/vector-icons";
 
-export default function Post({ post }) {
+export default function PostItem({ post }) {
+  const { id, image, name, comments, likes, place, location } = post;
+
   const { navigate } = useNavigation();
-  const isAnyComment = post.comments.length > 0;
-  const isAnyLike = post.likes > 0;
+  const isAnyComment = comments.length > 0;
+  const isAnyLike = likes > 0;
 
   return (
-    <View key={post.id} style={styles.postItem}>
-      <Image source={post.image} style={styles.picture} />
-      <Text style={styles.title}>{post.name}</Text>
+    <View style={styles.postItem}>
+      <Image source={image} style={styles.picture} />
+      <Text style={styles.title}>{name}</Text>
 
       <View style={styles.info}>
         <View style={styles.statistics}>
-          <TouchableOpacity style={styles.statItem}
+          <TouchableOpacity
+            style={styles.statItem}
             onPress={() =>
               navigate("CommentsScreen", {
-                postId: post.id,
-              })
-            }
+                postId: id,
+              })}
           >
             <FontAwesome
               name={isAnyComment ? "comment" : "comment-o"}
               size={24}
               color={isAnyComment ? "#FF6C00" : "#BDBDBD"}
             />
-            <Text style={[styles.statText, !isAnyComment && styles.transparent]}>
-              {post.comments.length}
+            <Text
+              style={[styles.statText, !isAnyComment && styles.transparent]}
+            >
+              {comments.length}
             </Text>
           </TouchableOpacity>
 
           {isAnyLike && (
-            <TouchableOpacity style={styles.statItem}
+            <TouchableOpacity
+              style={styles.statItem}
               onPress={() => console.log("liked")}
             >
               <AntDesign name='like2' size={24} color='#FF6C00' />
-              <Text style={styles.statText}>{post.likes}</Text>
+              <Text style={styles.statText}>{likes}</Text>
             </TouchableOpacity>
           )}
         </View>
 
-        <TouchableOpacity style={styles.statItem}
-          onPress={() => navigate("MapScreen", { postLocation: post.location })}
+        <TouchableOpacity
+          style={styles.statItem}
+          onPress={() => navigate("MapScreen", { postLocation: location })}
         >
           <Feather name='map-pin' size={24} color='#BDBDBD' />
-          <Text style={[styles.statText, styles.underline]}>{post.place}</Text>
+          <Text style={[styles.statText, styles.underline]}>{place}</Text>
         </TouchableOpacity>
       </View>
     </View>

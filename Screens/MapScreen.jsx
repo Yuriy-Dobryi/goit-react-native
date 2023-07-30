@@ -12,6 +12,7 @@ export default function MapScreen() {
       headerLeft: () => (
         <TouchableOpacity
           style={{ marginLeft: 16 }}
+          hitSlop={{ left: 16, right: 32 }}
           onPress={() => (canGoBack() ? goBack() : navigate("Home"))}
         >
           <Feather name='arrow-left' size={24} color='#212121' />
