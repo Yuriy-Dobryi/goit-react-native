@@ -8,11 +8,13 @@ import {
   StyleSheet,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
 export default function CreatePostScreen() {
   const [photoPath, setPhotoPath] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
   const isDataFilled = photoPath;
 
   async function makePhoto() {
@@ -34,6 +36,19 @@ export default function CreatePostScreen() {
 
   function removePhoto() {
     setPhotoPath(null);
+  }
+
+  async function getUserLocation() {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      alert("Permission to access location was denied");
+      return;
+    }
+
+    const location = await Location.getCurrentPositionAsync({
+      accuracy: Location.LocationAccuracy.Low,
+    });
+    setUserLocation(location);
   }
 
   function resetData() {
@@ -88,6 +103,7 @@ export default function CreatePostScreen() {
 
       <TouchableOpacity
         style={[styles.submitBtn, isDataFilled && styles.activeBtn]}
+        onPress={getUserLocation}
       >
         <Text style={[styles.submitBtnText, isDataFilled && styles.activeText]}>
           Опубліковати

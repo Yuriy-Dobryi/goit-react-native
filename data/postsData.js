@@ -7,7 +7,7 @@ const posts = [
     name: "Ліс",
     image: require("../images/forest.jpg"),
     place: "Ivano-Frankivsk Region",
-    location: { latitude: 49.2714836, longitude: 23.8227551 },
+    location: { latitude: 48.7288129, longitude: 24.5381868 },
     likes: 69,
     comments: [],
   },
@@ -16,7 +16,7 @@ const posts = [
     name: "Захід на Чорному морі",
     image: require("../images/sunset.jpg"),
     place: "Ukraine",
-    location: { latitude: 44.5017086, longitude: 34.118931 },
+    location: { latitude: 46.5514422, longitude: 30.8373829 },
     likes: 0,
     comments: [
       {
@@ -50,7 +50,7 @@ const posts = [
     name: "Старий будиночок у Венеції",
     image: require("../images/house.jpg"),
     place: "Italy",
-    location: { latitude: 45.4040691, longitude: 12.0576662 },
+    location: { latitude: 45.4271302, longitude: 12.3414672 },
     likes: 38,
     comments: [
       {

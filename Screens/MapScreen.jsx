@@ -1,12 +1,18 @@
 import { useLayoutEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { View, TouchableOpacity, Dimensions, StyleSheet } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import { Feather } from "@expo/vector-icons";
 
 export default function MapScreen() {
   const navigation = useNavigation();
   const { canGoBack, goBack, navigate } = navigation;
-
+  const {
+    params: {
+      postLocation: { longitude, latitude },
+    },
+  } = useRoute();
+  
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -23,15 +29,29 @@ export default function MapScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>MapScreen</Text>
+      <MapView
+        style={styles.map}
+        mapType='standard'
+        region={{
+          latitude,
+          longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        <Marker title='I am here' coordinate={{ latitude, longitude }} />
+      </MapView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingTop: 32,
-    backgroundColor: "#fff",
+    flex: 1,
+    justifyContent: "center",
+  },
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });
