@@ -53,12 +53,12 @@ export default function CreatePostScreen() {
   }
 
   async function getUserLocation() {
-    setUserLocation((state) => ({ ...state, isLoading: true }));
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      alert("Permission to location access was denied");
+      return setUserLocation({ ...defaultUserLocation });
     }
-
+    
+    setUserLocation((state) => ({ ...state, isLoading: true }));
     const {
       coords: { latitude, longitude },
     } = await Location.getCurrentPositionAsync({
