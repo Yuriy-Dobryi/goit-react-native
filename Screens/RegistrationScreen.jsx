@@ -31,19 +31,19 @@ const Registration = () => {
   const { navigate } = useNavigation();
 
   async function selectPhoto() {
-    const permissionResult = await ImagePicker.getMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      alert("Permission to access image library roll is required!");
+    const { granted } = await ImagePicker.getMediaLibraryPermissionsAsync();
+    if (!granted) {
+      alert("Permission to access of the image library is required!");
       return;
     }
-    
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+
+    const { canceled, assets } = await ImagePicker.launchImageLibraryAsync({
       quality: 1,
       allowsEditing: true,
       allowsMultipleSelection: false,
     });
-    if (!pickerResult.canceled) {
-      setPhotoPath(pickerResult.assets[0].uri);
+    if (!canceled) {
+      setPhotoPath(assets[0].uri);
     }
   }
 
@@ -51,12 +51,13 @@ const Registration = () => {
     setPhotoPath(null);
   }
 
-  function onSubmit(data) {
-    // console.log(data); не забути про trim
-    navigate("Home");
-  }
   function togglePasswordShow() {
     setShowPassword(!isPasswordHide);
+  }
+
+  function onSubmit(data) {
+    console.log(data);
+    navigate("Home");
   }
 
   return (

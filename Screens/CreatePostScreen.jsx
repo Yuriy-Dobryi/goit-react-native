@@ -8,29 +8,43 @@ import {
   StyleSheet,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 
+const defaultUserLocation = {
+  isLoading: false,
+  latitude: null,
+  longitude: null,
+};
+
 export default function CreatePostScreen() {
+  const [isCameraPermissionDenied, setCameraDenied] = useState(false);
   const [photoPath, setPhotoPath] = useState(null);
-  const [userLocation, setUserLocation] = useState(null);
-  const isDataFilled = photoPath;
+  const [title, setTitle] = useState("");
+  const [place, setPlace] = useState("");
+  const [userLocation, setUserLocation] = useState({ ...defaultUserLocation });
+  const isDataFullFilled =
+    photoPath && title && place && !userLocation.isLoading;
 
   async function makePhoto() {
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-    if (!permissionResult.granted) {
-      alert("Permission to access image library roll is required!");
-      return;
+    const { granted } = await ImagePicker.requestCameraPermissionsAsync();
+    if (!granted) {
+      setCameraDenied(true);
+      return alert("Permission to camera access was denied");
     }
 
-    const pickerResult = await ImagePicker.launchCameraAsync({
+    await MediaLibrary.requestPermissionsAsync();
+    const { canceled, assets } = await ImagePicker.launchCameraAsync({
       quality: 1,
       allowsEditing: true,
       allowsMultipleSelection: false,
     });
-    if (!pickerResult.canceled) {
-      setPhotoPath(pickerResult.assets[0].uri);
+    if (!canceled) {
+      await MediaLibrary.createAssetAsync(assets[0].uri);
+      setPhotoPath(assets[0].uri);
+      setCameraDenied(false);
     }
   }
 
@@ -39,20 +53,34 @@ export default function CreatePostScreen() {
   }
 
   async function getUserLocation() {
+    setUserLocation((state) => ({ ...state, isLoading: true }));
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      alert("Permission to access location was denied");
-      return;
+      alert("Permission to location access was denied");
     }
 
-    const location = await Location.getCurrentPositionAsync({
+    const {
+      coords: { latitude, longitude },
+    } = await Location.getCurrentPositionAsync({
       accuracy: Location.LocationAccuracy.Low,
     });
-    setUserLocation(location);
+    setUserLocation((state) => ({
+      ...state,
+      isLoading: false,
+      latitude,
+      longitude,
+    }));
+  }
+
+  function handleSubmit() {
+    console.log({ photoPath, title, title, place, userLocation });
   }
 
   function resetData() {
     setPhotoPath(null);
+    setTitle("");
+    setPlace("");
+    setUserLocation({ ...defaultUserLocation });
   }
 
   return (
@@ -67,7 +95,6 @@ export default function CreatePostScreen() {
         {photoPath && (
           <Image style={styles.imgSize} source={{ uri: photoPath }} />
         )}
-
         <View style={[styles.cameraBtn, photoPath && styles.transparent]}>
           <FontAwesome
             name='camera'
@@ -76,28 +103,37 @@ export default function CreatePostScreen() {
           />
         </View>
       </TouchableOpacity>
-
-      <Text style={styles.text}>
-        {photoPath ? "Редагувати фото" : "Завантажте фото"}
-      </Text>
-      {/* {photoPath && (
-        <Text style={styles.text}>
-          {userLocation ? userLocation.coords.altitude : "WAITING"}
+      {isCameraPermissionDenied ? (
+        <Text style={styles.warning}>
+          To create a new post, please allow access to your camera.
         </Text>
-      )} */}
+      ) : (
+        <Text style={styles.cameraText}>
+          {photoPath ? "Редагувати фото" : "Завантажте фото"}
+        </Text>
+      )}
+
       <View style={styles.inputsList}>
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.input}
+            value={title}
+            onChangeText={(value) => setTitle(value.trim())}
             placeholder='Назва...'
             placeholderTextColor='#BDBDBD'
           />
         </View>
-
         <View style={styles.inputWrapper}>
           <Feather name='map-pin' size={24} color='#BDBDBD' />
           <TextInput
             style={styles.input}
+            value={
+              userLocation.isLoading
+                ? "Please, wait for setting your location . . ."
+                : place
+            }
+            onChangeText={(value) => setPlace(value.trim())}
+            onBlur={getUserLocation}
             placeholder='Місцевість...'
             placeholderTextColor='#BDBDBD'
           />
@@ -105,10 +141,13 @@ export default function CreatePostScreen() {
       </View>
 
       <TouchableOpacity
-        style={[styles.submitBtn, isDataFilled && styles.activeBtn]}
-        onPress={getUserLocation}
+        style={[styles.submitBtn, isDataFullFilled && styles.activeBtn]}
+        disabled={!isDataFullFilled}
+        onPress={handleSubmit}
       >
-        <Text style={[styles.submitBtnText, isDataFilled && styles.activeText]}>
+        <Text
+          style={[styles.submitBtnText, isDataFullFilled && styles.activeText]}
+        >
           Опубліковати
         </Text>
       </TouchableOpacity>
@@ -153,10 +192,15 @@ const styles = StyleSheet.create({
   transparent: {
     backgroundColor: "rgba(255, 255, 255, 0.30)",
   },
-  text: {
+  cameraText: {
     marginTop: 8,
     color: "#BDBDBD",
     fontSize: 16,
+  },
+  warning: {
+    color: "red",
+    fontSize: 18,
+    textAlign: "center",
   },
   inputsList: {
     rowGap: 16,
@@ -165,6 +209,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
+    columnGap: 4,
     borderBottomWidth: 1,
     borderBottomColor: "#E8E8E8",
   },

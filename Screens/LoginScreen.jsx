@@ -20,7 +20,7 @@ function LoginScreen() {
   const { navigate } = useNavigation();
 
   function onSubmit(data) {
-    // console.log(data); не забути про trim
+    console.log(data);
     navigate("Home");
   }
   function togglePasswordShow() {
