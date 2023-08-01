@@ -1,7 +1,12 @@
+import { useEffect } from "react";
 import { TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+
+import { useSelector, useDispatch } from "react-redux";
+import { selectIsLoggedIn } from "../redux/auth/authSelectors";
+import { logOut } from "../redux/auth/authOperations";
 
 import PostsScreen from "./PostsScreen";
 import CreatePostScreen from "./CreatePostScreen";
@@ -10,7 +15,15 @@ import ProfileScreen from "./ProfileScreen";
 const Tabs = createBottomTabNavigator();
 
 export default function Home() {
-  const { goBack, navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("Login");
+    }
+  }, [isLoggedIn]);
 
   const tabBarIcon = (name, color) => (
     <Feather name={name} size={24} color={color} />
@@ -30,7 +43,7 @@ export default function Home() {
     <TouchableOpacity
       style={{ marginRight: 16 }}
       hitSlop={{ left: 32, right: 16 }}
-      onPress={() => navigate("Login")}
+      onPress={() => dispatch(logOut())}
     >
       {tabBarIcon("log-out", "#BDBDBD")}
     </TouchableOpacity>

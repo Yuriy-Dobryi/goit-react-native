@@ -1,14 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { ImageBackground, View, TouchableOpacity, Text } from "react-native";
 import { useForm } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import { useSelector, useDispatch } from "react-redux";
+import { selectIsLoggedIn } from "../redux/auth/authSelectors";
+
 import CredentialInputs from "../components/CredentialInputs";
-import bgImage from "../images/mountains-bg.png";
+import mountainsBgImage from "../images/mountains-bg.png";
 import styles from "../components/credentialInputsStyles";
+import { logIn } from "../redux/auth/authOperations";
 
 function LoginScreen() {
+  const { navigate } = useNavigation();
+  const isLoggedIn  = useSelector(selectIsLoggedIn);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("Home");
+    }
+  }, [isLoggedIn]);
+
   const { control, handleSubmit } = useForm({
     defaultValues: {
       email: "",
@@ -17,18 +31,13 @@ function LoginScreen() {
   });
   const [focusedField, setFocusedField] = useState(false);
   const [isPasswordHide, setShowPassword] = useState(true);
-  const { navigate } = useNavigation();
 
-  function onSubmit(data) {
-    console.log(data);
-    navigate("Home");
-  }
   function togglePasswordShow() {
     setShowPassword(!isPasswordHide);
   }
 
   return (
-    <ImageBackground style={styles.bgImage} source={bgImage}>
+    <ImageBackground style={styles.mountainsBgImage} source={mountainsBgImage}>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps='handled'
         contentContainerStyle={styles.container}
@@ -49,7 +58,7 @@ function LoginScreen() {
 
           <TouchableOpacity
             style={styles.primaryBtn}
-            onPress={handleSubmit(onSubmit)}
+            onPress={handleSubmit((data) => dispatch(logIn(data)))}
           >
             <Text style={styles.primaryBtnText}>Увійти</Text>
           </TouchableOpacity>

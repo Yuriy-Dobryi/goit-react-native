@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ImageBackground,
   View,
@@ -12,23 +12,37 @@ import * as ImagePicker from "expo-image-picker";
 import { useForm, Controller } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import { useSelector, useDispatch } from "react-redux";
+import { selectIsLoggedIn } from "../redux/auth/authSelectors";
+import { register } from "../redux/auth/authOperations";
+
 import CredentialInputs from "../components/CredentialInputs";
-import bgImagePath from "../images/mountains-bg.png";
+import mountainsBgImage from "../images/mountains-bg.png";
 import addIcon from "../images/add-icon.png";
 import removeIcon from "../images/remove-icon.png";
 import styles from "../components/credentialInputsStyles";
 
 const Registration = () => {
-  const [photoPath, setPhotoPath] = useState(null);
+  const { navigate } = useNavigation();
+  const isLoggedIn  = useSelector(selectIsLoggedIn);
+  const dispatch = useDispatch();
+
+  const [photoURL, setPhotoURL] = useState(null);
   const { control, handleSubmit } = useForm({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
   const [focusedField, setFocusedField] = useState(false);
   const [isPasswordHide, setShowPassword] = useState(true);
-  const { navigate } = useNavigation();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("Home");
+    }
+  }, [isLoggedIn]);
 
   async function selectPhoto() {
     const { granted } = await ImagePicker.getMediaLibraryPermissionsAsync();
@@ -43,25 +57,20 @@ const Registration = () => {
       allowsMultipleSelection: false,
     });
     if (!canceled) {
-      setPhotoPath(assets[0].uri);
+      setPhotoURL(assets[0].uri);
     }
   }
 
   function removePhoto() {
-    setPhotoPath(null);
+    setPhotoURL(null);
   }
 
   function togglePasswordShow() {
     setShowPassword(!isPasswordHide);
   }
 
-  function onSubmit(data) {
-    console.log(data);
-    navigate("Home");
-  }
-
   return (
-    <ImageBackground style={styles.bgImage} source={bgImagePath}>
+    <ImageBackground style={styles.mountainsBgImage} source={mountainsBgImage}>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps='handled'
         contentContainerStyle={styles.container}
@@ -69,14 +78,14 @@ const Registration = () => {
         <View style={styles.form}>
           <TouchableOpacity
             style={styles.userPhotoWrapper}
-            onPress={photoPath ? removePhoto : selectPhoto}
+            onPress={photoURL ? removePhoto : selectPhoto}
           >
-            {photoPath && (
-              <Image style={styles.userPhoto} source={{ uri: photoPath }} />
+            {photoURL && (
+              <Image style={styles.userPhoto} source={{ uri: photoURL }} />
             )}
             <View style={styles.photoBtnPosition}>
               <Image
-                source={photoPath ? removeIcon : addIcon}
+                source={photoURL ? removeIcon : addIcon}
                 style={{ width: 30, height: 30 }}
               />
             </View>
@@ -87,7 +96,7 @@ const Registration = () => {
           <View style={styles.inputList}>
             <Controller
               control={control}
-              name='login'
+              name='name'
               rules={{
                 required: true,
               }}
@@ -99,11 +108,11 @@ const Registration = () => {
                   <TextInput
                     style={[
                       styles.input,
-                      focusedField === "login" && styles.inputFocused,
+                      focusedField === "name" && styles.inputFocused,
                     ]}
                     placeholder='Логін'
                     onChangeText={onChange}
-                    onFocus={() => setFocusedField("login")}
+                    onFocus={() => setFocusedField("name")}
                     onBlur={() => setFocusedField("")}
                     value={value}
                   />
@@ -125,7 +134,9 @@ const Registration = () => {
 
           <TouchableOpacity
             style={styles.primaryBtn}
-            onPress={handleSubmit(onSubmit)}
+            onPress={handleSubmit((credentialInputs) =>
+              dispatch(register({ ...credentialInputs, photoURL }))
+            )}
           >
             <Text style={styles.primaryBtnText}>Зареєструватися</Text>
           </TouchableOpacity>
