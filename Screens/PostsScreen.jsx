@@ -1,9 +1,16 @@
 import { View, ScrollView, StyleSheet, Image, Text } from "react-native";
+
+import { useSelector, useDispatch } from "react-redux";
+import { selectPosts } from "../redux/posts/postsSelectors";
+
 import PostItem from "../components/PostItem";
 import posts from "../data/postsData";
 import profileOwner from "../images/profile-owner.jpg";
 
 export default function PostsScreen() {
+  const postss = useSelector(selectPosts);
+  console.log(postss);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profile}>

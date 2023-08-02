@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import {
-  setDoc,
+  addDoc,
   collection,
   getDocs,
   doc,
@@ -33,27 +33,25 @@ const getAllPosts = createAsyncThunk(
 
 const addPost = createAsyncThunk(
   "posts/addPost",
-  async ({ uid, newPost }, { rejectWithValue }) => {
+  async (newPost, { rejectWithValue }) => {
     try {
-      const response = await fetch(newPost.image);
-      const image = await response.blob();
-      await uploadBytes(
-        ref(storage, "postsImages/" + image._data.blobId),
-        image
-      );
-      const imageURL = await getDownloadURL(
-        ref(storage, "postsImages/" + image._data.blobId)
-      );
+      const response = await fetch(newPost.photoURL);
+      const photoBlob = await response.blob();
 
-      const post = {
+      // await uploadBytes(
+      //   ref(storage, "postsImages/" + `${photoBlob.data.blobId}`),
+      //   photoBlob
+      // );
+      // const photoURL = await getDownloadURL(storageRef);
+      
+      
+      await addDoc(collection(db, "posts"), {
         ...newPost,
-        image: imageURL,
-        userId: uid,
+      });
+
+      return {
+        ...newPost,
       };
-
-      setDoc(doc(db, "posts", post.id), post);
-
-      return post;
     } catch (error) {
       console.log(error.message);
       return rejectWithValue(error.message);

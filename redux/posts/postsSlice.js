@@ -12,7 +12,8 @@ const postsSlice = createSlice({
         state.posts = payload;
       })
       .addCase(addPost.fulfilled, (state, { payload }) => {
-        state.posts.push(payload);
+        console.log(payload);
+        state.posts.push('1');
       })
       .addCase(addComment.fulfilled, (state, { payload }) => {
         const postIndex = state.posts.findIndex(

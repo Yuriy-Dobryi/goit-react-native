@@ -12,6 +12,8 @@ import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather, FontAwesome } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { addPost } from "../redux/posts/postsOperations";
 
 const defaultUserLocation = {
   isLoading: false,
@@ -20,13 +22,14 @@ const defaultUserLocation = {
 };
 
 export default function CreatePostScreen() {
+  const dispatch = useDispatch();
   const [isCameraPermissionDenied, setCameraDenied] = useState(false);
-  const [photoPath, setPhotoPath] = useState(null);
+  const [photoURL, setPhotoURL] = useState(null);
   const [title, setTitle] = useState("");
   const [place, setPlace] = useState("");
   const [userLocation, setUserLocation] = useState({ ...defaultUserLocation });
   const isDataFullFilled =
-    photoPath && title && place && !userLocation.isLoading;
+    photoURL && title && place && !userLocation.isLoading;
 
   async function makePhoto() {
     const { granted } = await ImagePicker.requestCameraPermissionsAsync();
@@ -43,13 +46,13 @@ export default function CreatePostScreen() {
     });
     if (!canceled) {
       await MediaLibrary.createAssetAsync(assets[0].uri);
-      setPhotoPath(assets[0].uri);
+      setPhotoURL(assets[0].uri);
       setCameraDenied(false);
     }
   }
 
   function removePhoto() {
-    setPhotoPath(null);
+    setPhotoURL(null);
   }
 
   async function getUserLocation() {
@@ -57,7 +60,7 @@ export default function CreatePostScreen() {
     if (status !== "granted") {
       return setUserLocation({ ...defaultUserLocation });
     }
-    
+
     setUserLocation((state) => ({ ...state, isLoading: true }));
     const {
       coords: { latitude, longitude },
@@ -73,11 +76,11 @@ export default function CreatePostScreen() {
   }
 
   function handleSubmit() {
-    console.log({ photoPath, title, title, place, userLocation });
+    dispatch(addPost({ photoURL, title, title, place, userLocation }));
   }
 
   function resetData() {
-    setPhotoPath(null);
+    setPhotoURL(null);
     setTitle("");
     setPlace("");
     setUserLocation({ ...defaultUserLocation });
@@ -90,16 +93,16 @@ export default function CreatePostScreen() {
     >
       <TouchableOpacity
         style={styles.imgWrapper}
-        onPress={photoPath ? removePhoto : makePhoto}
+        onPress={photoURL ? removePhoto : makePhoto}
       >
-        {photoPath && (
-          <Image style={styles.imgSize} source={{ uri: photoPath }} />
+        {photoURL && (
+          <Image style={styles.imgSize} source={{ uri: photoURL }} />
         )}
-        <View style={[styles.cameraBtn, photoPath && styles.transparent]}>
+        <View style={[styles.cameraBtn, photoURL && styles.transparent]}>
           <FontAwesome
             name='camera'
             size={24}
-            color={photoPath ? "#fff" : "#BDBDBD"}
+            color={photoURL ? "#fff" : "#BDBDBD"}
           />
         </View>
       </TouchableOpacity>
@@ -109,7 +112,7 @@ export default function CreatePostScreen() {
         </Text>
       ) : (
         <Text style={styles.cameraText}>
-          {photoPath ? "Редагувати фото" : "Завантажте фото"}
+          {photoURL ? "Редагувати фото" : "Завантажте фото"}
         </Text>
       )}
 
