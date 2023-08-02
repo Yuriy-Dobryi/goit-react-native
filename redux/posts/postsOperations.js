@@ -37,17 +37,18 @@ const addPost = createAsyncThunk(
     try {
       const response = await fetch(newPost.photoURL);
       const photoBlob = await response.blob();
+      
+      await uploadBytes(ref(storage, "images/"), photoBlob);
+      console.log('Не доходить сюда, а просто вилітає додаток (повністю з expo)');
+      // const photoURL = await getDownloadURL(ref(storage, "images/"));
+      // console.log(photoURL);
 
-      // await uploadBytes(
-      //   ref(storage, "postsImages/" + `${photoBlob.data.blobId}`),
-      //   photoBlob
-      // );
-      // const photoURL = await getDownloadURL(storageRef);
-      
-      
-      await addDoc(collection(db, "posts"), {
-        ...newPost,
-      });
+      // const docRef = await addDoc(collection(db, "posts"), {
+      //   first: "Ada",
+      //   last: "Lovelace",
+      //   born: 1815,
+      // });
+      // console.log("Document written with ID: ", docRef.id);
 
       return {
         ...newPost,
