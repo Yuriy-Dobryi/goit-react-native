@@ -4,28 +4,39 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectPosts } from "../redux/posts/postsSelectors";
 
 import PostItem from "../components/PostItem";
-import posts from "../data/postsData";
+// import posts from "../data/postsData";
 import profileOwner from "../images/profile-owner.jpg";
+import { useEffect } from "react";
+import { getAllPosts } from "../redux/posts/postsOperations";
 
 export default function PostsScreen() {
-  const postss = useSelector(selectPosts);
-  console.log(postss);
-
+  const posts = useSelector(selectPosts);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, []);
+  
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.profile}>
-        <Image source={profileOwner} style={styles.userImage} />
-        <View>
-          <Text style={styles.userLogin}>Natali Romanova</Text>
-          <Text style={styles.userEmail}>email@example.com</Text>
-        </View>
-      </View>
-      <View style={styles.postsList}>
-        {posts.map((post) => {
-          return <PostItem key={post.id} post={post} />;
-        })}
-      </View>
-    </ScrollView>
+    <>
+      {posts ? (
+        <ScrollView style={styles.container}>
+          <View style={styles.profile}>
+            <Image source={profileOwner} style={styles.userImage} />
+            <View>
+              <Text style={styles.userLogin}>Natali Romanova</Text>
+              <Text style={styles.userEmail}>email@example.com</Text>
+            </View>
+          </View>
+          <View style={styles.postsList}>
+            {posts.map((post) => {
+              return <PostItem key={post.id} post={post} />;
+            })}
+          </View>
+        </ScrollView>
+      ) :
+      <View>Loading</View>}
+    </>
   );
 }
 

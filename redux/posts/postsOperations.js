@@ -33,26 +33,24 @@ const getAllPosts = createAsyncThunk(
 
 const addPost = createAsyncThunk(
   "posts/addPost",
-  async (newPost, { rejectWithValue }) => {
+  async (postData, { rejectWithValue }) => {
     try {
-      const response = await fetch(newPost.photoURL);
-      const photoBlob = await response.blob();
-      
-      await uploadBytes(ref(storage, "images/"), photoBlob);
-      console.log('Не доходить сюда, а просто вилітає додаток (повністю з expo)');
-      // const photoURL = await getDownloadURL(ref(storage, "images/"));
-      // console.log(photoURL);
+      const response = await fetch(postData.image);
+      const blobImage = await response.blob();
+      const blobImageLocalPath = "photos-of-posts/" + blobImage._data.blobId;
 
-      // const docRef = await addDoc(collection(db, "posts"), {
-      //   first: "Ada",
-      //   last: "Lovelace",
-      //   born: 1815,
-      // });
-      // console.log("Document written with ID: ", docRef.id);
+      await uploadBytes(ref(storage, blobImageLocalPath), blobImage);
+      const blobImageURL = await getDownloadURL(
+        ref(storage, blobImageLocalPath)
+      );
 
-      return {
-        ...newPost,
+      const newPost = {
+        ...postData,
+        image: blobImageURL,
       };
+      const { id } = await addDoc(collection(db, "posts"), newPost);
+
+      return { id, ...newPost };
     } catch (error) {
       console.log(error.message);
       return rejectWithValue(error.message);

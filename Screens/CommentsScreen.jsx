@@ -13,17 +13,18 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
+import { useSelector } from "react-redux";
+import { selectPostByID } from "../redux/posts/postsSelectors";
 import CommentItem from "../components/CommentItem";
-import posts from "../data/postsData";
-import defaultPhoto from "../images/forest.jpg";
+import defaultImage from "../images/default-post-image.png";
 
 export default function CommentsScreen() {
-  const [photoPath, setPhotoPath] = useState(null);
   const navigation = useNavigation();
   const { canGoBack, goBack, navigate } = navigation;
   const { params } = useRoute();
-  const currentPost = posts.find((postItem) => postItem.id === params.postId);
-  const isAnyComment = currentPost.comments.length > 0;
+  const { image, comments } = useSelector(selectPostByID(params.id));
+  console.log(image);
+  const isAnyComment = comments?.length > 0;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -42,13 +43,15 @@ export default function CommentsScreen() {
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       <ScrollView scrollIndicatorInsets={{ right: -5 }}>
-        <Image
-          styles={styles.photo}
-          source={photoPath ? { uri: photoPath } : defaultPhoto}
-        />
+        <View style={styles.imageContainer}>
+          <Image
+            styles={styles.image}
+            source={image ? { uri: image } : defaultImage}
+          />
+        </View>
         {isAnyComment ? (
           <View style={styles.commentsList}>
-            {currentPost.comments.map((comment) => (
+            {comments.map((comment) => (
               <CommentItem key={comment.id} comment={comment} />
             ))}
           </View>
@@ -90,12 +93,15 @@ const styles = StyleSheet.create({
     rowGap: 24,
     paddingVertical: 32,
   },
-  photo: {
+  imageContainer: {
+    alignItems: 'center',
+  },
+  image: {
     width: 340,
     height: 240,
   },
   inputWrapper: {
-    position: 'relative',
+    position: "relative",
   },
   input: {
     height: 50,

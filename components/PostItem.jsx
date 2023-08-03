@@ -3,15 +3,14 @@ import { useNavigation } from "@react-navigation/native";
 import { FontAwesome, AntDesign, Feather } from "@expo/vector-icons";
 
 export default function PostItem({ post }) {
-  const { id, image, name, comments, likes, place, location } = post;
-
+  const { id, image, name, comments, likes, place, mapLocation } = post;
   const { navigate } = useNavigation();
   const isAnyComment = comments.length > 0;
   const isAnyLike = likes > 0;
 
   return (
     <View style={styles.postItem}>
-      <Image source={image} style={styles.picture} />
+      <Image source={{ uri: image }} style={styles.picture} />
       <Text style={styles.title}>{name}</Text>
 
       <View style={styles.info}>
@@ -19,9 +18,8 @@ export default function PostItem({ post }) {
           <TouchableOpacity
             style={styles.statItem}
             onPress={() =>
-              navigate("CommentsScreen", {
-                postId: id,
-              })}
+              navigate("CommentsScreen", { id })
+            }
           >
             <FontAwesome
               name={isAnyComment ? "comment" : "comment-o"}
@@ -48,7 +46,7 @@ export default function PostItem({ post }) {
 
         <TouchableOpacity
           style={styles.statItem}
-          onPress={() => navigate("MapScreen", { postLocation: location })}
+          onPress={() => navigate("MapScreen", { mapLocation })}
         >
           <Feather name='map-pin' size={24} color='#BDBDBD' />
           <Text style={[styles.statText, styles.underline]}>{place}</Text>
@@ -63,6 +61,8 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   picture: {
+    width: 343,
+    height: 240,
     borderRadius: 8,
   },
   title: {

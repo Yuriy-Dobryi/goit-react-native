@@ -9,7 +9,7 @@ export default function MapScreen() {
   const { canGoBack, goBack, navigate } = navigation;
   const {
     params: {
-      postLocation: { longitude, latitude },
+      mapLocation: { longitude, latitude },
     },
   } = useRoute();
   

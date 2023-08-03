@@ -15,7 +15,7 @@ import { Feather, FontAwesome } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { addPost } from "../redux/posts/postsOperations";
 
-const defaultUserLocation = {
+const defaultMapLocation = {
   isLoading: false,
   latitude: null,
   longitude: null,
@@ -24,12 +24,12 @@ const defaultUserLocation = {
 export default function CreatePostScreen() {
   const dispatch = useDispatch();
   const [isCameraPermissionDenied, setCameraDenied] = useState(false);
-  const [photoURL, setPhotoURL] = useState(null);
+  const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
   const [place, setPlace] = useState("");
-  const [userLocation, setUserLocation] = useState({ ...defaultUserLocation });
+  const [mapLocation, setMapLocation] = useState({ ...defaultMapLocation });
   const isDataFullFilled =
-    photoURL && title && place && !userLocation.isLoading;
+    image && title && place && !mapLocation.isLoading;
 
   async function makePhoto() {
     const { granted } = await ImagePicker.requestCameraPermissionsAsync();
@@ -46,28 +46,28 @@ export default function CreatePostScreen() {
     });
     if (!canceled) {
       await MediaLibrary.createAssetAsync(assets[0].uri);
-      setPhotoURL(assets[0].uri);
+      setImage(assets[0].uri);
       setCameraDenied(false);
     }
   }
 
   function removePhoto() {
-    setPhotoURL(null);
+    setImage(null);
   }
 
-  async function getUserLocation() {
+  async function getMapLocation() {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      return setUserLocation({ ...defaultUserLocation });
+      return setMapLocation({ ...defaultMapLocation });
     }
 
-    setUserLocation((state) => ({ ...state, isLoading: true }));
+    setMapLocation((state) => ({ ...state, isLoading: true }));
     const {
       coords: { latitude, longitude },
     } = await Location.getCurrentPositionAsync({
       accuracy: Location.LocationAccuracy.Low,
     });
-    setUserLocation((state) => ({
+    setMapLocation((state) => ({
       ...state,
       isLoading: false,
       latitude,
@@ -76,14 +76,25 @@ export default function CreatePostScreen() {
   }
 
   function handleSubmit() {
-    dispatch(addPost({ photoURL, title, title, place, userLocation }));
+    dispatch(
+      addPost({
+        image,
+        title,
+        title,
+        place,
+        mapLocation,
+        comments: [],
+        likes: 0,
+      })
+    );
+    resetData();
   }
 
   function resetData() {
-    setPhotoURL(null);
+    setImage(null);
     setTitle("");
     setPlace("");
-    setUserLocation({ ...defaultUserLocation });
+    setMapLocation({ ...defaultMapLocation });
   }
 
   return (
@@ -93,16 +104,16 @@ export default function CreatePostScreen() {
     >
       <TouchableOpacity
         style={styles.imgWrapper}
-        onPress={photoURL ? removePhoto : makePhoto}
+        onPress={image ? removePhoto : makePhoto}
       >
-        {photoURL && (
-          <Image style={styles.imgSize} source={{ uri: photoURL }} />
+        {image && (
+          <Image style={styles.imgSize} source={{ uri: image }} />
         )}
-        <View style={[styles.cameraBtn, photoURL && styles.transparent]}>
+        <View style={[styles.cameraBtn, image && styles.transparent]}>
           <FontAwesome
             name='camera'
             size={24}
-            color={photoURL ? "#fff" : "#BDBDBD"}
+            color={image ? "#fff" : "#BDBDBD"}
           />
         </View>
       </TouchableOpacity>
@@ -112,7 +123,7 @@ export default function CreatePostScreen() {
         </Text>
       ) : (
         <Text style={styles.cameraText}>
-          {photoURL ? "Редагувати фото" : "Завантажте фото"}
+          {image ? "Редагувати фото" : "Завантажте фото"}
         </Text>
       )}
 
@@ -131,12 +142,12 @@ export default function CreatePostScreen() {
           <TextInput
             style={styles.input}
             value={
-              userLocation.isLoading
+              mapLocation.isLoading
                 ? "Please, wait for setting your location . . ."
                 : place
             }
             onChangeText={(value) => setPlace(value.trim())}
-            onBlur={getUserLocation}
+            onBlur={getMapLocation}
             placeholder='Місцевість...'
             placeholderTextColor='#BDBDBD'
           />
@@ -182,6 +193,7 @@ const styles = StyleSheet.create({
   imgSize: {
     width: "100%",
     height: "100%",
+    borderRadius: 8,
   },
   cameraBtn: {
     position: "absolute",

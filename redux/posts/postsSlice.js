@@ -3,27 +3,24 @@ import { getAllPosts, addPost, addComment, addLike } from "./postsOperations";
 
 const postsSlice = createSlice({
   name: "posts",
-  initialState: {
-    posts: [],
-  },
+  initialState: [],
   extraReducers: (builder) =>
     builder
       .addCase(getAllPosts.fulfilled, (state, { payload }) => {
-        state.posts = payload;
+        return payload;
       })
       .addCase(addPost.fulfilled, (state, { payload }) => {
-        // console.log(payload);
-        state.posts.push('1');
+        state.push(payload);
       })
       .addCase(addComment.fulfilled, (state, { payload }) => {
-        const postIndex = state.posts.findIndex(
+        const postIndex = state.findIndex(
           (post) => post.id === payload.postId
         );
-        state.posts[postIndex].comments.push(payload.comment);
+        state[postIndex].comments.push(payload.comment);
       })
       .addCase(addLike.fulfilled, (state, { payload }) => {
-        const postIndex = state.posts.findIndex((post) => post.id === payload);
-        state.posts[postIndex].likesCount += 1;
+        const postIndex = state.findIndex((post) => post.id === payload);
+        state[postIndex].likesCount += 1;
       }),
 });
 
