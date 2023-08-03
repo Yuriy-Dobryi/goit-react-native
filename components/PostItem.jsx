@@ -1,6 +1,7 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome, AntDesign, Feather } from "@expo/vector-icons";
+import defaultImage from "../images/default-post-image.png";
 
 export default function PostItem({ post }) {
   const { id, image, name, comments, likes, place, mapLocation } = post;
@@ -10,16 +11,14 @@ export default function PostItem({ post }) {
 
   return (
     <View style={styles.postItem}>
-      <Image source={{ uri: image }} style={styles.picture} />
+        <Image style={styles.image} source={{ uri: image }} />
       <Text style={styles.title}>{name}</Text>
 
       <View style={styles.info}>
         <View style={styles.statistics}>
           <TouchableOpacity
             style={styles.statItem}
-            onPress={() =>
-              navigate("CommentsScreen", { id })
-            }
+            onPress={() => navigate("CommentsScreen", { id })}
           >
             <FontAwesome
               name={isAnyComment ? "comment" : "comment-o"}
@@ -60,9 +59,10 @@ const styles = StyleSheet.create({
   postItem: {
     marginBottom: 32,
   },
-  picture: {
-    width: 343,
+  image: {
+    width: 340,
     height: 240,
+    alignSelf: "center",
     borderRadius: 8,
   },
   title: {

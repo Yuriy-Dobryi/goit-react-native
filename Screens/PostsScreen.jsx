@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectPosts } from "../redux/posts/postsSelectors";
 
 import PostItem from "../components/PostItem";
-// import posts from "../data/postsData";
 import profileOwner from "../images/profile-owner.jpg";
 import { useEffect } from "react";
 import { getAllPosts } from "../redux/posts/postsOperations";

@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   View,
@@ -23,7 +23,6 @@ export default function CommentsScreen() {
   const { canGoBack, goBack, navigate } = navigation;
   const { params } = useRoute();
   const { image, comments } = useSelector(selectPostByID(params.id));
-  console.log(image);
   const isAnyComment = comments?.length > 0;
 
   useLayoutEffect(() => {
@@ -43,12 +42,7 @@ export default function CommentsScreen() {
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       <ScrollView scrollIndicatorInsets={{ right: -5 }}>
-        <View style={styles.imageContainer}>
-          <Image
-            styles={styles.image}
-            source={image ? { uri: image } : defaultImage}
-          />
-        </View>
+        <Image style={styles.image} source={image ? { uri: image } : defaultImage} />
         {isAnyComment ? (
           <View style={styles.commentsList}>
             {comments.map((comment) => (
@@ -57,12 +51,12 @@ export default function CommentsScreen() {
           </View>
         ) : (
           <Text style={styles.infoForUser}>
-            Відгуки щодо даного допису відсутні.
+            Відгуки даного допису відсутні.
           </Text>
         )}
       </ScrollView>
 
-      <View style={styles.inputWrapper}>
+      <View>
         <TextInput
           style={styles.input}
           placeholder='Коментувати...'
@@ -85,23 +79,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   infoForUser: {
-    paddingTop: 32,
+    marginTop: 32,
     color: "#BDBDBD",
     textAlign: "center",
-  },
-  commentsList: {
-    rowGap: 24,
-    paddingVertical: 32,
-  },
-  imageContainer: {
-    alignItems: 'center',
   },
   image: {
     width: 340,
     height: 240,
+    alignSelf: "center",
+    borderRadius: 8,
   },
-  inputWrapper: {
-    position: "relative",
+  commentsList: {
+    rowGap: 24,
+    paddingVertical: 32,
   },
   input: {
     height: 50,
