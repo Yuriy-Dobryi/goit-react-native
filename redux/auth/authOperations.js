@@ -1,28 +1,36 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { auth } from "../../config";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { auth, storage } from "../../config";
 
 const register = createAsyncThunk(
   "auth/registerUser",
-  async (credentials, { rejectWithValue }) => {
-    const { name, email, password, photoURL } = credentials;
+  async (userData, { rejectWithValue }) => {
+    const { name, email, password, avatarLocalPath } = userData;
+
     try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
+      const avatar = await fetch(avatarLocalPath);
+      const blobAvatar = await avatar.blob();
+      const blobAvatarLocalPath =
+        "photos-of-avatars/" + blobAvatar._data.blobId;
+
+      await uploadBytes(ref(storage, blobAvatarLocalPath), blobAvatar);
+      const blobAvatarURL = await getDownloadURL(
+        ref(storage, blobAvatarLocalPath)
       );
+
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(user, {
         displayName: name,
-        photoURL,
+        blobAvatarURL,
       });
 
-      return { name: user.displayName, email: user.email, photoURL };
+      return { uid: user.uid, email, name, avatarURL: blobAvatarURL };
     } catch (error) {
       alert(`RegisterError${error.message}`);
       return rejectWithValue(error.message);
@@ -35,16 +43,15 @@ const logIn = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     const { email, password } = credentials;
     try {
-      const { user } = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
+      const {
+        user: { uid, displayName, avatarURL },
+      } = await signInWithEmailAndPassword(auth, email, password);
 
       return {
-        name: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
+        uid,
+        email,
+        name: displayName,
+        avatarURL,
       };
     } catch (error) {
       alert(`LoginError${error.message}`);

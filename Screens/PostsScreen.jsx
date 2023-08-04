@@ -1,30 +1,37 @@
+import { useEffect } from "react";
 import { View, ScrollView, StyleSheet, Image, Text } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux";
+
 import { selectPosts } from "../redux/posts/postsSelectors";
 
 import PostItem from "../components/PostItem";
-import profileOwner from "../images/profile-owner.jpg";
-import { useEffect } from "react";
+import defaultOwnerAvatar from "../images/profile-owner.jpg";
 import { getAllPosts } from "../redux/posts/postsOperations";
+import { selectUser } from "../redux/auth/authSelectors";
 
 export default function PostsScreen() {
+  const { name, email, avatarURL } = useSelector(selectUser);
+  console.log(avatarURL);
   const posts = useSelector(selectPosts);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch(getAllPosts());
   }, []);
-  
+
   return (
     <>
       {posts ? (
         <ScrollView style={styles.container}>
           <View style={styles.profile}>
-            <Image source={profileOwner} style={styles.userImage} />
+            <Image
+              source={avatarURL ? { uri: avatarURL } : defaultOwnerAvatar}
+              style={styles.userImage}
+            />
             <View>
-              <Text style={styles.userLogin}>Natali Romanova</Text>
-              <Text style={styles.userEmail}>email@example.com</Text>
+              <Text style={styles.userLogin}>{name}</Text>
+              <Text style={styles.userEmail}>{email}</Text>
             </View>
           </View>
           <View style={styles.postsList}>
@@ -33,8 +40,9 @@ export default function PostsScreen() {
             })}
           </View>
         </ScrollView>
-      ) :
-      <View>Loading</View>}
+      ) : (
+        <View>Loading</View>
+      )}
     </>
   );
 }

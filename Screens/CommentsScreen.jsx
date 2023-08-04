@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   View,
@@ -14,16 +14,38 @@ import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
 import { useSelector } from "react-redux";
+import { selectUser } from "../redux/auth/authSelectors";
 import { selectPostByID } from "../redux/posts/postsSelectors";
 import CommentItem from "../components/CommentItem";
 import defaultImage from "../images/default-post-image.png";
+import { addComment } from "../redux/posts/postsOperations";
 
 export default function CommentsScreen() {
+  const [newMessage, setNewMessage] = useState('');
   const navigation = useNavigation();
   const { canGoBack, goBack, navigate } = navigation;
   const { params } = useRoute();
+  const { id } = useSelector(selectUser);
+  console.log(email);
   const { image, comments } = useSelector(selectPostByID(params.id));
   const isAnyComment = comments?.length > 0;
+
+    const pushBtnPressHandler = () => {
+      if (!message) {
+        alert("Ви не ввели коментар.");
+        return;
+      }
+
+      const newComment = {
+        authorID: id,
+        createdAt: Date.now(),
+        message,
+      };
+
+      Keyboard.dismiss();
+      dispatch(addComment({ uid, postId, comment: newComment }));
+      setNewMessage("");
+    };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -42,7 +64,10 @@ export default function CommentsScreen() {
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       <ScrollView scrollIndicatorInsets={{ right: -5 }}>
-        <Image style={styles.image} source={image ? { uri: image } : defaultImage} />
+        <Image
+          style={styles.image}
+          source={image ? { uri: image } : defaultImage}
+        />
         {isAnyComment ? (
           <View style={styles.commentsList}>
             {comments.map((comment) => (
@@ -59,10 +84,14 @@ export default function CommentsScreen() {
       <View>
         <TextInput
           style={styles.input}
+          value={newMessage}
+          onChangeText={(value) => {
+            setNewMessage(value);
+          }}
           placeholder='Коментувати...'
           placeholderTextColor='#BDBDBD'
         />
-        <TouchableOpacity style={styles.pushBtn}>
+        <TouchableOpacity style={styles.pushBtn} onPress={() => {}}>
           <Ionicons name='arrow-up-circle' size={34} color='#FF6C00' />
         </TouchableOpacity>
       </View>

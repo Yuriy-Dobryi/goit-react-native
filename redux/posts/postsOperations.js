@@ -60,14 +60,15 @@ const addPost = createAsyncThunk(
 
 const addComment = createAsyncThunk(
   "posts/addComment",
-  async ({ postId, comment }, { rejectWithValue }) => {
+  async ({ id, comment }, { rejectWithValue }) => {
     try {
-      await updateDoc(doc(db, "posts", postId), {
+      const a = await updateDoc(doc(db, "posts", id), {
         comments: arrayUnion({ ...comment }),
       });
-
-      return { postId, comment };
+      console.log(a);
+      return { id, comment };
     } catch (error) {
+
       console.log(error.message);
       return rejectWithValue(error.message);
     }
@@ -76,10 +77,11 @@ const addComment = createAsyncThunk(
 
 const addLike = createAsyncThunk(
   "posts/addLike",
-  async ({ id }, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
+      console.log('hello');
       await updateDoc(doc(db, "posts", id), {
-        likesCount: increment(1),
+        likes: increment(1),
       });
 
       return id;

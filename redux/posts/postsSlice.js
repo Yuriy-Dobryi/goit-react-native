@@ -14,13 +14,13 @@ const postsSlice = createSlice({
       })
       .addCase(addComment.fulfilled, (state, { payload }) => {
         const postIndex = state.findIndex(
-          (post) => post.id === payload.postId
+          (post) => post.id === payload.id
         );
         state[postIndex].comments.push(payload.comment);
       })
       .addCase(addLike.fulfilled, (state, { payload }) => {
         const postIndex = state.findIndex((post) => post.id === payload);
-        state[postIndex].likesCount += 1;
+        state[postIndex].likes += 1;
       }),
 });
 

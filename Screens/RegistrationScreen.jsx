@@ -27,7 +27,7 @@ const Registration = () => {
   const isLoggedIn  = useSelector(selectIsLoggedIn);
   const dispatch = useDispatch();
 
-  const [photoURL, setPhotoURL] = useState(null);
+  const [avatarLocalPath, setAvatarLocalPath] = useState(null);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: "",
@@ -57,17 +57,21 @@ const Registration = () => {
       allowsMultipleSelection: false,
     });
     if (!canceled) {
-      setPhotoURL(assets[0].uri);
+      setAvatarLocalPath(assets[0].uri);
     }
   }
 
   function removePhoto() {
-    setPhotoURL(null);
+    setAvatarLocalPath(null);
   }
 
   function togglePasswordShow() {
     setShowPassword(!isPasswordHide);
   }
+
+  const onSubmit = handleSubmit((credentialInputs) =>
+    dispatch(register({ ...credentialInputs, avatarLocalPath }))
+  );
 
   return (
     <ImageBackground style={styles.mountainsBgImage} source={mountainsBgImage}>
@@ -78,14 +82,14 @@ const Registration = () => {
         <View style={styles.form}>
           <TouchableOpacity
             style={styles.userPhotoWrapper}
-            onPress={photoURL ? removePhoto : selectPhoto}
+            onPress={avatarLocalPath ? removePhoto : selectPhoto}
           >
-            {photoURL && (
-              <Image style={styles.userPhoto} source={{ uri: photoURL }} />
+            {avatarLocalPath && (
+              <Image style={styles.userPhoto} source={{ uri: avatarLocalPath }} />
             )}
             <View style={styles.photoBtnPosition}>
               <Image
-                source={photoURL ? removeIcon : addIcon}
+                source={avatarLocalPath ? removeIcon : addIcon}
                 style={{ width: 30, height: 30 }}
               />
             </View>
@@ -134,9 +138,7 @@ const Registration = () => {
 
           <TouchableOpacity
             style={styles.primaryBtn}
-            onPress={handleSubmit((credentialInputs) =>
-              dispatch(register({ ...credentialInputs, photoURL }))
-            )}
+            onPress={onSubmit}
           >
             <Text style={styles.primaryBtnText}>Зареєструватися</Text>
           </TouchableOpacity>

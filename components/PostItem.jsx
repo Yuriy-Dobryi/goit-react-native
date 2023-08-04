@@ -1,17 +1,23 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import { FontAwesome, AntDesign, Feather } from "@expo/vector-icons";
+
+import { addLike } from "../redux/posts/postsOperations";
 import defaultImage from "../images/default-post-image.png";
 
 export default function PostItem({ post }) {
   const { id, image, name, comments, likes, place, mapLocation } = post;
   const { navigate } = useNavigation();
+  const dispatch = useDispatch();
   const isAnyComment = comments.length > 0;
-  const isAnyLike = likes > 0;
 
   return (
     <View style={styles.postItem}>
-        <Image style={styles.image} source={{ uri: image }} />
+      <Image
+        style={styles.image}
+        source={image ? { uri: image } : defaultImage}
+      />
       <Text style={styles.title}>{name}</Text>
 
       <View style={styles.info}>
@@ -32,15 +38,19 @@ export default function PostItem({ post }) {
             </Text>
           </TouchableOpacity>
 
-          {isAnyLike && (
-            <TouchableOpacity
-              style={styles.statItem}
-              onPress={() => console.log("liked")}
-            >
-              <AntDesign name='like2' size={24} color='#FF6C00' />
-              <Text style={styles.statText}>{likes}</Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            style={styles.statItem}
+            onPress={() => dispatch(addLike(id))}
+          >
+            <AntDesign
+              name='like2'
+              size={24}
+              color={likes ? "#FF6C00" : "#BDBDBD"}
+            />
+            <Text style={[styles.statText, !likes && styles.transparent]}>
+              {likes}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity
