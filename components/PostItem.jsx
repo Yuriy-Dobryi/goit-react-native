@@ -8,10 +8,11 @@ import defaultImage from "../images/default-post-image.png";
 
 export default function PostItem({ post }) {
   const { id, image, name, comments, likes, place, mapLocation } = post;
-  const { navigate } = useNavigation();
-  const dispatch = useDispatch();
   const isAnyComment = comments.length > 0;
 
+  const { navigate } = useNavigation();
+  const dispatch = useDispatch();
+  
   return (
     <View style={styles.postItem}>
       <Image

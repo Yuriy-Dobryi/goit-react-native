@@ -25,7 +25,7 @@ const getAllPosts = createAsyncThunk(
 
       return posts;
     } catch (error) {
-      console.log(error.message);
+      alert(error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -52,7 +52,7 @@ const addPost = createAsyncThunk(
 
       return { id, ...newPost };
     } catch (error) {
-      console.log(error.message);
+      alert(error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -69,7 +69,7 @@ const addComment = createAsyncThunk(
       return { id, comment };
     } catch (error) {
 
-      console.log(error.message);
+      alert(error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -79,14 +79,13 @@ const addLike = createAsyncThunk(
   "posts/addLike",
   async (id, { rejectWithValue }) => {
     try {
-      console.log('hello');
       await updateDoc(doc(db, "posts", id), {
         likes: increment(1),
       });
 
       return id;
     } catch (error) {
-      console.log(error.message);
+      alert(error.message);
       return rejectWithValue(error.message);
     }
   }

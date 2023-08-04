@@ -1,18 +1,15 @@
 import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { View, ScrollView, StyleSheet, Image, Text } from "react-native";
 
-import { useSelector, useDispatch } from "react-redux";
-
-import { selectPosts } from "../redux/posts/postsSelectors";
-
 import PostItem from "../components/PostItem";
-import defaultOwnerAvatar from "../images/profile-owner.jpg";
+import { selectPosts } from "../redux/posts/postsSelectors";
 import { getAllPosts } from "../redux/posts/postsOperations";
 import { selectUser } from "../redux/auth/authSelectors";
+import defaultOwnerAvatar from "../images/default-owner-avatar.png";
 
 export default function PostsScreen() {
   const { name, email, avatarURL } = useSelector(selectUser);
-  console.log(avatarURL);
   const posts = useSelector(selectPosts);
   const dispatch = useDispatch();
 

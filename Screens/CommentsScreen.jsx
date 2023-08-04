@@ -7,6 +7,7 @@ import {
   Image,
   Text,
   TextInput,
+  Keyboard,
   StyleSheet,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -21,31 +22,26 @@ import defaultImage from "../images/default-post-image.png";
 import { addComment } from "../redux/posts/postsOperations";
 
 export default function CommentsScreen() {
-  const [newMessage, setNewMessage] = useState('');
-  const navigation = useNavigation();
-  const { canGoBack, goBack, navigate } = navigation;
+  const [newMessage, setNewMessage] = useState("");
   const { params } = useRoute();
-  const { id } = useSelector(selectUser);
-  console.log(email);
-  const { image, comments } = useSelector(selectPostByID(params.id));
+  const { uid } = useSelector(selectUser);
+  const { id, image, comments } = useSelector(selectPostByID(params.id));
   const isAnyComment = comments?.length > 0;
 
-    const pushBtnPressHandler = () => {
-      if (!message) {
-        alert("Ви не ввели коментар.");
-        return;
-      }
+  const navigation = useNavigation();
+  const { canGoBack, goBack, navigate } = navigation;
 
-      const newComment = {
-        authorID: id,
-        createdAt: Date.now(),
-        message,
-      };
-
-      Keyboard.dismiss();
-      dispatch(addComment({ uid, postId, comment: newComment }));
-      setNewMessage("");
+  const pushBtnPressHandler = () => {
+    const newComment = {
+      authorID: uid,
+      createdAt: Date.now(),
+      message,
     };
+    
+    Keyboard.dismiss();
+    dispatch(addComment({ id, comment: newComment }));
+    setNewMessage("");
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({

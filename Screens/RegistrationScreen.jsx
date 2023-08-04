@@ -23,8 +23,8 @@ import removeIcon from "../images/remove-icon.png";
 import styles from "../components/credentialInputsStyles";
 
 const Registration = () => {
-  const { navigate } = useNavigation();
-  const isLoggedIn  = useSelector(selectIsLoggedIn);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const { navigate } = useNavigation()
   const dispatch = useDispatch();
 
   const [avatarLocalPath, setAvatarLocalPath] = useState(null);

@@ -14,23 +14,34 @@ const register = createAsyncThunk(
     const { name, email, password, avatarLocalPath } = userData;
 
     try {
-      const avatar = await fetch(avatarLocalPath);
-      const blobAvatar = await avatar.blob();
-      const blobAvatarLocalPath =
-        "photos-of-avatars/" + blobAvatar._data.blobId;
-
-      await uploadBytes(ref(storage, blobAvatarLocalPath), blobAvatar);
-      const blobAvatarURL = await getDownloadURL(
-        ref(storage, blobAvatarLocalPath)
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
       );
 
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(user, {
-        displayName: name,
-        blobAvatarURL,
-      });
+      if (avatarLocalPath) {
+        const avatar = await fetch(avatarLocalPath);
+        const blobAvatar = await avatar.blob();
+        const blobAvatarLocalPath =
+          "photos-of-avatars/" + blobAvatar._data.blobId;
+        
+        await uploadBytes(ref(storage, blobAvatarLocalPath), blobAvatar);
+        const avatarURL = await getDownloadURL(
+          ref(storage, blobAvatarLocalPath)
+        );
+        await updateProfile(user, {
+          displayName: name,
+          photoURL: avatarURL,
+        });
+        return { uid: user.uid, email, name, avatarURL };
 
-      return { uid: user.uid, email, name, avatarURL: blobAvatarURL };
+      } else {
+        await updateProfile(user, {
+          displayName: name,
+        });
+        return { uid: user.uid, email, name, avatarURL: "" };
+      }
     } catch (error) {
       alert(`RegisterError${error.message}`);
       return rejectWithValue(error.message);
@@ -44,14 +55,14 @@ const logIn = createAsyncThunk(
     const { email, password } = credentials;
     try {
       const {
-        user: { uid, displayName, avatarURL },
+        user: { uid, displayName, photoURL },
       } = await signInWithEmailAndPassword(auth, email, password);
 
       return {
         uid,
         email,
         name: displayName,
-        avatarURL,
+        avatarURL: photoURL,
       };
     } catch (error) {
       alert(`LoginError${error.message}`);

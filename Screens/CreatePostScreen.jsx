@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   View,
   TouchableOpacity,
@@ -22,14 +23,15 @@ const defaultMapLocation = {
 };
 
 export default function CreatePostScreen() {
-  const dispatch = useDispatch();
   const [isCameraPermissionDenied, setCameraDenied] = useState(false);
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
   const [place, setPlace] = useState("");
   const [mapLocation, setMapLocation] = useState({ ...defaultMapLocation });
-  const isDataFullFilled =
-    image && title && place && !mapLocation.isLoading;
+  const isDataFullFilled = image && title && place && !mapLocation.isLoading;
+
+  const { navigate } = useNavigation();
+  const dispatch = useDispatch();
 
   async function makePhoto() {
     const { granted } = await ImagePicker.requestCameraPermissionsAsync();
@@ -82,12 +84,16 @@ export default function CreatePostScreen() {
         title,
         title,
         place,
-        mapLocation,
+        mapLocation: {
+          latitude: mapLocation.latitude,
+          longitude: mapLocation.longitude,
+        },
         comments: [],
         likes: 0,
       })
     );
     resetData();
+    navigate("PostsScreen");
   }
 
   function resetData() {
@@ -106,9 +112,7 @@ export default function CreatePostScreen() {
         style={styles.imgWrapper}
         onPress={image ? removePhoto : makePhoto}
       >
-        {image && (
-          <Image style={styles.imgSize} source={{ uri: image }} />
-        )}
+        {image && <Image style={styles.imgSize} source={{ uri: image }} />}
         <View style={[styles.cameraBtn, image && styles.transparent]}>
           <FontAwesome
             name='camera'
@@ -130,16 +134,17 @@ export default function CreatePostScreen() {
       <View style={styles.inputsList}>
         <View style={styles.inputWrapper}>
           <TextInput
+            placeholder='Назва...'
             style={styles.input}
             value={title}
             onChangeText={(value) => setTitle(value.trim())}
-            placeholder='Назва...'
             placeholderTextColor='#BDBDBD'
           />
         </View>
         <View style={styles.inputWrapper}>
           <Feather name='map-pin' size={24} color='#BDBDBD' />
           <TextInput
+            placeholder='Місцевість...'
             style={styles.input}
             value={
               mapLocation.isLoading
@@ -147,8 +152,7 @@ export default function CreatePostScreen() {
                 : place
             }
             onChangeText={(value) => setPlace(value.trim())}
-            onBlur={getMapLocation}
-            placeholder='Місцевість...'
+            onBlur={() => place && getMapLocation()}
             placeholderTextColor='#BDBDBD'
           />
         </View>
