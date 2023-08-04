@@ -14,15 +14,15 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
-import { useSelector } from "react-redux";
+import CommentItem from "../components/CommentItem";
+import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../redux/auth/authSelectors";
 import { selectPostByID } from "../redux/posts/postsSelectors";
-import CommentItem from "../components/CommentItem";
-import defaultImage from "../images/default-post-image.png";
 import { addComment } from "../redux/posts/postsOperations";
+import defaultImage from "../images/default-post-image.png";
 
 export default function CommentsScreen() {
-  const [newMessage, setNewMessage] = useState("");
+  const [message, setMessage] = useState("");
   const { params } = useRoute();
   const { uid } = useSelector(selectUser);
   const { id, image, comments } = useSelector(selectPostByID(params.id));
@@ -30,17 +30,18 @@ export default function CommentsScreen() {
 
   const navigation = useNavigation();
   const { canGoBack, goBack, navigate } = navigation;
+  const dispatch = useDispatch();
 
-  const pushBtnPressHandler = () => {
+  const onMessageSubmit = () => {
     const newComment = {
       authorID: uid,
       createdAt: Date.now(),
       message,
     };
-    
+
     Keyboard.dismiss();
     dispatch(addComment({ id, comment: newComment }));
-    setNewMessage("");
+    setMessage("");
   };
 
   useLayoutEffect(() => {
@@ -80,14 +81,14 @@ export default function CommentsScreen() {
       <View>
         <TextInput
           style={styles.input}
-          value={newMessage}
+          value={message}
           onChangeText={(value) => {
-            setNewMessage(value);
+            setMessage(value);
           }}
           placeholder='Коментувати...'
           placeholderTextColor='#BDBDBD'
         />
-        <TouchableOpacity style={styles.pushBtn} onPress={() => {}}>
+        <TouchableOpacity style={styles.pushBtn} onPress={onMessageSubmit}>
           <Ionicons name='arrow-up-circle' size={34} color='#FF6C00' />
         </TouchableOpacity>
       </View>

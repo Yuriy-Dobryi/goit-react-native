@@ -62,10 +62,9 @@ const addComment = createAsyncThunk(
   "posts/addComment",
   async ({ id, comment }, { rejectWithValue }) => {
     try {
-      const a = await updateDoc(doc(db, "posts", id), {
+      await updateDoc(doc(db, "posts", id), {
         comments: arrayUnion({ ...comment }),
       });
-      console.log(a);
       return { id, comment };
     } catch (error) {
 
