@@ -33,9 +33,11 @@ export default function CommentsScreen() {
   const dispatch = useDispatch();
 
   const onMessageSubmit = () => {
+    const createdAt = Date.now();
     const newComment = {
+      id: uid + createdAt,
       authorID: uid,
-      createdAt: Date.now(),
+      createdAt,
       message,
     };
 
@@ -88,7 +90,10 @@ export default function CommentsScreen() {
           placeholder='Коментувати...'
           placeholderTextColor='#BDBDBD'
         />
-        <TouchableOpacity style={styles.pushBtn} onPress={onMessageSubmit}>
+        <TouchableOpacity
+          style={styles.sendBtn}
+          onPress={() => message && onMessageSubmit()}
+        >
           <Ionicons name='arrow-up-circle' size={34} color='#FF6C00' />
         </TouchableOpacity>
       </View>
@@ -127,7 +132,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 100,
   },
-  pushBtn: {
+  sendBtn: {
     position: "absolute",
     right: 8,
     bottom: 7,

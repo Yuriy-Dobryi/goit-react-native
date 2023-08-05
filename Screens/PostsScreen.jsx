@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { View, ScrollView, StyleSheet, Image, Text } from "react-native";
+import { View, ScrollView, Image, Text, StyleSheet } from "react-native";
 
 import PostItem from "../components/PostItem";
 import { selectPosts } from "../redux/posts/postsSelectors";

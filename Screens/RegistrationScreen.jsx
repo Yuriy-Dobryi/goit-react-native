@@ -44,7 +44,7 @@ const Registration = () => {
     }
   }, [isLoggedIn]);
 
-  async function selectPhoto() {
+  async function selectAvatar() {
     const { granted } = await ImagePicker.getMediaLibraryPermissionsAsync();
     if (!granted) {
       alert("Permission to access of the image library is required!");
@@ -61,7 +61,7 @@ const Registration = () => {
     }
   }
 
-  function removePhoto() {
+  function removeAvatar() {
     setAvatarLocalPath(null);
   }
 
@@ -81,13 +81,16 @@ const Registration = () => {
       >
         <View style={styles.form}>
           <TouchableOpacity
-            style={styles.userPhotoWrapper}
-            onPress={avatarLocalPath ? removePhoto : selectPhoto}
+            style={styles.userAvatarWrapper}
+            onPress={avatarLocalPath ? removeAvatar : selectAvatar}
           >
             {avatarLocalPath && (
-              <Image style={styles.userPhoto} source={{ uri: avatarLocalPath }} />
+              <Image
+                style={styles.userAvatar}
+                source={{ uri: avatarLocalPath }}
+              />
             )}
-            <View style={styles.photoBtnPosition}>
+            <View style={styles.avatarBtn}>
               <Image
                 source={avatarLocalPath ? removeIcon : addIcon}
                 style={{ width: 30, height: 30 }}
@@ -136,10 +139,7 @@ const Registration = () => {
             />
           </View>
 
-          <TouchableOpacity
-            style={styles.primaryBtn}
-            onPress={onSubmit}
-          >
+          <TouchableOpacity style={styles.primaryBtn} onPress={onSubmit}>
             <Text style={styles.primaryBtnText}>Зареєструватися</Text>
           </TouchableOpacity>
 

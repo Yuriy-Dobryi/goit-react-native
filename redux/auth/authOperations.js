@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, deleteObject, getDownloadURL } from "firebase/storage";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -9,7 +9,7 @@ import {
 import { auth, storage } from "../../config";
 
 const register = createAsyncThunk(
-  "auth/registerUser",
+  "auth/register",
   async (userData, { rejectWithValue }) => {
     const { name, email, password, avatarLocalPath } = userData;
 
@@ -43,14 +43,14 @@ const register = createAsyncThunk(
         return { uid: user.uid, email, name, avatarURL: "" };
       }
     } catch (error) {
-      alert(`RegisterError${error.message}`);
+      alert(`RegisterError, ${error.message}`);
       return rejectWithValue(error.message);
     }
   }
 );
 
 const logIn = createAsyncThunk(
-  "auth/logInUser",
+  "auth/logIn",
   async (credentials, { rejectWithValue }) => {
     const { email, password } = credentials;
     try {
@@ -65,22 +65,58 @@ const logIn = createAsyncThunk(
         avatarURL: photoURL,
       };
     } catch (error) {
-      alert(`LoginError${error.message}`);
+      alert(`LoginError, ${error.message}`);
       return rejectWithValue(error.message);
     }
   }
 );
 
 const logOut = createAsyncThunk(
-  "auth/logOutUser",
+  "auth/logOut",
   async (_, { rejectWithValue }) => {
     try {
       await signOut(auth);
     } catch (error) {
-      alert(`LogoutError${error.message}`);
+      alert(`LogoutError, ${error.message}`);
       return rejectWithValue(error.message);
     }
   }
 );
 
-export { register, logIn, logOut };
+const updateAvatarURL = createAsyncThunk(
+  "auth/updateAvatarURL",
+  async (avatarLocalPath, { rejectWithValue }) => {
+    try {
+      const avatar = await fetch(avatarLocalPath);
+      const blobAvatar = await avatar.blob();
+      const blobAvatarLocalPath =
+        "photos-of-avatars/" + blobAvatar._data.blobId;
+      
+      await uploadBytes(ref(storage, blobAvatarLocalPath), blobAvatar);
+      const avatarURL = await getDownloadURL(ref(storage, blobAvatarLocalPath));
+      await updateProfile(auth.currentUser, {
+        photoURL: avatarURL,
+      });
+
+      return avatarURL;
+    } catch (error) {
+      alert(`updateAvatarURL, ${error.message}`);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+const removeAvatarURL = createAsyncThunk(
+  "auth/removeAvatarURL",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { photoURL } = auth.currentUser;
+      await deleteObject(ref(storage, photoURL));
+    } catch (error) {
+      alert(`removeAvatarURL, ${error.message}`);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export { register, logIn, logOut, updateAvatarURL, removeAvatarURL };

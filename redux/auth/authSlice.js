@@ -1,7 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register, logIn, logOut } from "./authOperations";
+import {
+  register,
+  logIn,
+  logOut,
+  updateAvatarURL,
+  removeAvatarURL,
+} from "./authOperations";
 
-const userDefaultData = {
+const defaultUserData = {
   uid: "",
   email: "",
   name: "",
@@ -12,7 +18,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     isLoggedIn: false,
-    user: { ...userDefaultData },
+    user: { ...defaultUserData },
   },
   extraReducers: (builder) => {
     builder
@@ -21,13 +27,18 @@ const authSlice = createSlice({
         state.user = payload;
       })
       .addCase(logIn.fulfilled, (state, { payload }) => {
-        console.log(payload);
         state.isLoggedIn = true;
         state.user = payload;
       })
       .addCase(logOut.fulfilled, (state) => {
         state.isLoggedIn = false;
-        state.user = { ...userDefaultData };
+        state.user = { ...defaultUserData };
+      })
+      .addCase(updateAvatarURL.fulfilled, (state, { payload }) => {
+        state.user.avatarURL = payload;
+      })
+      .addCase(removeAvatarURL.fulfilled, (state) => {
+        state.user.avatarURL = null;
       });
   },
 });

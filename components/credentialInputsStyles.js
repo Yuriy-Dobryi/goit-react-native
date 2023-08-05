@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    position: "relative",
     paddingTop: 92,
     paddingBottom: 45,
     paddingRight: 16,
@@ -20,7 +19,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
   },
 
-  userPhotoWrapper: {
+  userAvatarWrapper: {
     position: "absolute",
     top: 0,
     left: "50%",
@@ -30,11 +29,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     borderRadius: 16,
   },
-  userPhoto: {
+  userAvatar: {
     height: "100%",
     borderRadius: 16,
   },
-  photoBtnPosition: {
+  avatarBtn: {
     position: "absolute",
     zIndex: 69,
     right: -14,

@@ -19,7 +19,6 @@ const getAllPosts = createAsyncThunk(
       const querySnapshot = await getDocs(collection(db, "posts"));
       querySnapshot.forEach((doc) => {
         const post = { ...doc.data(), id: doc.id };
-
         posts.push(post);
       });
 

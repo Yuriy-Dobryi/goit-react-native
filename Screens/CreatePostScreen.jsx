@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import {
   View,
   TouchableOpacity,
@@ -8,12 +6,16 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather, FontAwesome } from "@expo/vector-icons";
-import { useDispatch } from "react-redux";
+
+import { selectUser } from "../redux/auth/authSelectors";
 import { addPost } from "../redux/posts/postsOperations";
 
 const defaultMapLocation = {
@@ -30,6 +32,7 @@ export default function CreatePostScreen() {
   const [mapLocation, setMapLocation] = useState({ ...defaultMapLocation });
   const isDataFullFilled = image && title && place && !mapLocation.isLoading;
 
+  const { uid } = useSelector(selectUser);
   const { navigate } = useNavigation();
   const dispatch = useDispatch();
 
@@ -80,8 +83,8 @@ export default function CreatePostScreen() {
   function handleSubmit() {
     dispatch(
       addPost({
+        authorID: uid,
         image,
-        title,
         title,
         place,
         mapLocation: {
