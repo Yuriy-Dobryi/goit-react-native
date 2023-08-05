@@ -19,8 +19,9 @@ const register = createAsyncThunk(
         email,
         password
       );
-
+      
       if (avatarLocalPath) {
+        // dispatch(updateAvatarURL(avatarLocalPath));
         const avatar = await fetch(avatarLocalPath);
         const blobAvatar = await avatar.blob();
         const blobAvatarLocalPath =

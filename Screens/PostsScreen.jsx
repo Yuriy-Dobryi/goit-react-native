@@ -27,7 +27,7 @@ export default function PostsScreen() {
               style={styles.userImage}
             />
             <View>
-              <Text style={styles.userLogin}>{name}</Text>
+              <Text style={styles.userName}>{name}</Text>
               <Text style={styles.userEmail}>{email}</Text>
             </View>
           </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 16,
   },
-  userLogin: {
+  userName: {
     color: "#212121",
     fontSize: 13,
   },
