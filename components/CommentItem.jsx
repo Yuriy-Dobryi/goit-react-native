@@ -6,7 +6,7 @@ import defaultOwnerAvatar from "../images/default-owner-avatar.png";
 
 export default function CommentItem({ comment }) {
   const { authorID, message, createdAt } = comment;
-  const { uid, avatar } = useSelector(selectUser);
+  const { uid, avatarURL } = useSelector(selectUser);
   const isPostOwner = authorID === uid;
 
   return (
@@ -17,7 +17,7 @@ export default function CommentItem({ comment }) {
       ]}
     >
       <Image
-        source={avatar ? { uri: avatar } : defaultOwnerAvatar}
+        source={isPostOwner ? { uri: avatarURL } : defaultOwnerAvatar}
         style={styles.avatar}
       />
       <View style={styles.messageWrapper}>

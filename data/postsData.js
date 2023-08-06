@@ -1,4 +1,4 @@
-import profileOwner from "../images/profile-owner.jpg";
+import profileOwner from "../images/default-owner-avatar.png";
 import user from "../images/default-user.jpg";
 
 const posts = [

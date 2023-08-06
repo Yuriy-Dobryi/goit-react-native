@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
   form: {
     paddingTop: 92,
-    paddingBottom: 45,
+    paddingBottom: 42,
     paddingRight: 16,
     paddingLeft: 16,
     backgroundColor: "#fff",

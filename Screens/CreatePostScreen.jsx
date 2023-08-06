@@ -85,8 +85,8 @@ export default function CreatePostScreen() {
       addPost({
         authorID: uid,
         image,
-        title,
-        place,
+        title: title.trim(),
+        place: place.trim(),
         mapLocation: {
           latitude: mapLocation.latitude,
           longitude: mapLocation.longitude,
@@ -109,7 +109,6 @@ export default function CreatePostScreen() {
   return (
     <KeyboardAwareScrollView
       style={styles.container}
-      keyboardShouldPersistTaps='handled'
     >
       <TouchableOpacity
         style={styles.imgWrapper}
@@ -140,7 +139,7 @@ export default function CreatePostScreen() {
             placeholder='Назва...'
             style={styles.input}
             value={title}
-            onChangeText={(value) => setTitle(value.trim())}
+            onChangeText={(value) => setTitle(value)}
             placeholderTextColor='#BDBDBD'
           />
         </View>
@@ -154,7 +153,7 @@ export default function CreatePostScreen() {
                 ? "Please, wait for setting your location . . ."
                 : place
             }
-            onChangeText={(value) => setPlace(value.trim())}
+            onChangeText={(value) => setPlace(value)}
             onBlur={() => place && getMapLocation()}
             placeholderTextColor='#BDBDBD'
           />

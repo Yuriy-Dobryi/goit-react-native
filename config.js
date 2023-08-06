@@ -8,15 +8,12 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCYT-gNBew6v1UA4dfzpviarvNYQWGI4Ns",
-  authDomain: "hw-goit-react-native.firebaseapp.com",
-  databaseURL:
-    "https://hw-goit-react-native-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "hw-goit-react-native",
-  storageBucket: "hw-goit-react-native.appspot.com",
-  messagingSenderId: "790411895485",
-  appId: "1:790411895485:web:5983b39b9aea8224eb0dd4",
-  measurementId: "G-9LQCJT9CLL",
+  apiKey: "AIzaSyDFwhuflwHvQtrV66ljQ1BhLpRJGrbLK5c",
+  authDomain: "hw-goit-react-nativee.firebaseapp.com",
+  projectId: "hw-goit-react-nativee",
+  storageBucket: "hw-goit-react-nativee.appspot.com",
+  messagingSenderId: "722246677313",
+  appId: "1:722246677313:web:a40978aba16f52e5dca7c0",
 };
 
 const app = initializeApp(firebaseConfig);

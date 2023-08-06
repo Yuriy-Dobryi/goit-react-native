@@ -7,7 +7,7 @@ import { addLike } from "../redux/posts/postsOperations";
 import defaultImage from "../images/default-post-image.png";
 
 export default function PostItem({ post }) {
-  const { id, image, name, comments, likes, place, mapLocation } = post;
+  const { id, image, title, comments, likes, place, mapLocation } = post;
   const isAnyComment = comments.length > 0;
 
   const { navigate } = useNavigation();
@@ -19,7 +19,7 @@ export default function PostItem({ post }) {
         style={styles.image}
         source={image ? { uri: image } : defaultImage}
       />
-      <Text style={styles.title}>{name}</Text>
+      <Text style={styles.title}>{title}</Text>
 
       <View style={styles.info}>
         <View style={styles.statistics}>

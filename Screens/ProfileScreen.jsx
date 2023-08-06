@@ -8,22 +8,24 @@ import {
   Text,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import { Feather } from "@expo/vector-icons";
 
 import PostItem from "../components/PostItem";
 import { selectUser } from "../redux/auth/authSelectors";
 import { selectPostsByOwner } from "../redux/posts/postsSelectors";
-import { updateAvatarURL, removeAvatarURL } from "../redux/auth/authOperations";
+import {
+  updateAvatarURL,
+  removeAvatarURL,
+  logOut,
+} from "../redux/auth/authOperations";
 import mountainsBgImage from "../images/mountains-bg.png";
-import defaultOwnerAvatar from "../images/default-owner-avatar.png";
 import addIcon from "../images/add-icon.png";
 import removeIcon from "../images/remove-icon.png";
 
 export default function PostsScreen() {
-  const { name, avatarURL } = useSelector(selectUser);
-  // const posts = useSelector(selectPostsByOwner);
-  const posts = [];
+  const { uid, name, avatarURL } = useSelector(selectUser);
+  const posts = useSelector(selectPostsByOwner(uid));
   const dispatch = useDispatch();
 
   async function selectAvatar() {
@@ -48,22 +50,33 @@ export default function PostsScreen() {
   }
 
   return (
-    <ImageBackground style={styles.mountainsBgImage} source={mountainsBgImage}>
-      <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={{ backgroundColor: "#fff" }}>
+      <ImageBackground
+        style={styles.mountainsBgImage}
+        source={mountainsBgImage}
+      >
+        <TouchableOpacity
+          style={styles.userAvatarWrapper}
+          onPress={avatarURL ? removeAvatar : selectAvatar}
+        >
+          {avatarURL && (
+            <Image style={styles.userAvatar} source={{ uri: avatarURL }} />
+          )}
+          <View style={styles.photoBtn}>
+            <Image
+              source={avatarURL ? removeIcon : addIcon}
+              style={{ width: 30, height: 30 }}
+            />
+          </View>
+        </TouchableOpacity>
+
         <View style={styles.profile}>
           <TouchableOpacity
-            style={styles.userAvatarWrapper}
-            onPress={avatarURL ? removeAvatar : selectAvatar}
+            style={styles.logoutBtn}
+            hitSlop={{ left: 32, right: 16, top: 32, bottom: 32 }}
+            onPress={() => dispatch(logOut())}
           >
-            {avatarURL && (
-              <Image style={styles.userAvatar} source={{ uri: avatarURL }} />
-            )}
-            <View style={styles.photoBtn}>
-              <Image
-                source={avatarURL ? removeIcon : addIcon}
-                style={{ width: 30, height: 30 }}
-              />
-            </View>
+            <Feather name='log-out' size={24} color='#BDBDBD' />
           </TouchableOpacity>
           <Text style={styles.userName}>{name}</Text>
           <View style={styles.postsList}>
@@ -72,22 +85,19 @@ export default function PostsScreen() {
             })}
           </View>
         </View>
-      </ScrollView>
-    </ImageBackground>
+      </ImageBackground>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   mountainsBgImage: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "flex-end",
+    paddingTop: 120,
   },
   profile: {
+    flex: 1,
     paddingTop: 92,
-    paddingBottom: 45,
+    paddingBottom: 42,
     paddingRight: 16,
     paddingLeft: 16,
     backgroundColor: "#fff",
@@ -96,9 +106,10 @@ const styles = StyleSheet.create({
   },
   userAvatarWrapper: {
     position: "absolute",
-    top: 0,
+    zIndex: 69,
+    top: 120,
     left: "50%",
-    transform: [{ translateX: -50 }, { translateY: -60 }],
+    transform: [{ translateX: -60 }, { translateY: -60 }],
     width: 120,
     height: 120,
     backgroundColor: "#F6F6F6",
@@ -114,13 +125,18 @@ const styles = StyleSheet.create({
     right: -14,
     bottom: 14,
   },
+  logoutBtn: {
+    position: "absolute",
+    right: 16,
+    top: 22,
+  },
   userName: {
     color: "#212121",
     fontSize: 30,
     fontWeight: 500,
-    textAlign: 'center',
+    textAlign: "center",
   },
   postsList: {
-    paddingBottom: 42,
+    paddingTop: 32,
   },
 });
