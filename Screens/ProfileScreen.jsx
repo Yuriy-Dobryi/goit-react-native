@@ -24,8 +24,8 @@ import addIcon from "../images/add-icon.png";
 import removeIcon from "../images/remove-icon.png";
 
 export default function PostsScreen() {
-  const { uid, name, avatarURL } = useSelector(selectUser);
-  const posts = useSelector(selectPostsByOwner(uid));
+  const { name, avatarURL } = useSelector(selectUser);
+  const posts = useSelector(selectPostsByOwner);
   const dispatch = useDispatch();
 
   async function selectAvatar() {
